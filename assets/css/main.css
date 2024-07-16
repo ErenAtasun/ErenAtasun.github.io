@@ -17,6 +17,27 @@
   --nav-font: "Lato", sans-serif;
 }
 
+.turkish-btn {
+  display: flex;
+  align-items: center;
+}
+
+.turkish-flag {
+  width: 20px; /* Adjust size as needed */
+  height: auto;
+  margin-left: 5px;
+}
+.British-btn {
+  display: flex;
+  align-items: center;
+}
+
+.British-flag {
+  width: 20px; /* Adjust size as needed */
+  height: auto;
+  margin-left: 5px;
+}
+
 /* Global Colors */
 :root {
   --background-color: #ffffff;
