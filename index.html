@@ -3,130 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eren Atasun | Unity Game Developer</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        header {
-            background-color: #333;
-            color: #fff;
-            padding: 10px 0;
-            text-align: center;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-            padding: 20px;
-            background-color: #fff;
-        }
-        .section {
-            margin-bottom: 20px;
-        }
-        .section h2 {
-            border-bottom: 2px solid #333;
-            padding-bottom: 10px;
-        }
-        .contact-info, .social-links, .technical-skills, .personal-skills, .languages, .education, .work-experience {
-            margin-bottom: 20px;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        ul li {
-            margin-bottom: 10px;
-        }
-        a {
-            color: #333;
-            text-decoration: none;
-        }
-        footer {
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            padding: 10px 0;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+    <title>Eren Atasun - CV</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Eren Atasun</h1>
-        <p>Unity Game Developer | Computer Engineer</p>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="header-content">
+            <img src="Assets/ErenAtasun.jpg" alt="Eren Atasun">
+            <h1>Eren Atasun</h1>
+            <p>Unity Game Developer | Computer Engineer</p>
+        </div>
     </header>
-    <div class="container">
-        <div class="section contact-info">
-            <h2>Contact Information</h2>
-            <ul>
-                <li>Address: Yaylacık, Yavuz Sultan Selim Cd. 17-13, 35400 Buca Osb/Buca/İzmir</li>
-                <li>Phone: +905309495084</li>
-                <li>Email: <a href="mailto:atasun35@gmail.com">atasun35@gmail.com</a></li>
-            </ul>
+
+    <section id="about">
+        <h2>About Me</h2>
+        <p>I am a student of Computer Engineering at Manisa Celal Bayar University. I have experience in game development, especially using the Unity engine...</p>
+        <a href="Assets/CV(ErenAtasun).pdf" download>Download CV</a>
+    </section>
+
+    <section id="skills">
+        <h2>Skills</h2>
+        <div class="skills-container">
+            <div class="skill">
+                <h3>Technical Skills</h3>
+                <ul>
+                    <li>Unity/C#, Grid Systems</li>
+                    <li>Java, Data Structures</li>
+                    <li>Python</li>
+                    <li>Flutter</li>
+                    <li>C</li>
+                </ul>
+            </div>
+            <div class="skill">
+                <h3>Personal Skills</h3>
+                <ul>
+                    <li>Leadership</li>
+                    <li>Accurate translation of business requirements</li>
+                    <li>Fast prototype generation</li>
+                    <li>Adaptable to change</li>
+                </ul>
+            </div>
         </div>
-        <div class="section social-links">
-            <h2>Social Links</h2>
-            <ul>
-                <li><a href="https://www.linkedin.com/in/erenatasun" target="_blank">LinkedIn Profile</a></li>
-                <li><a href="https://github.com/ErenAtasun" target="_blank">GitHub Profile</a></li>
-            </ul>
+    </section>
+
+    <section id="experience">
+        <h2>Work Experience</h2>
+        <ul class="timeline">
+            <li>
+                <h3>ENM Digital, Intern</h3>
+                <span>May 2024 - Present</span>
+                <p>Developing and improving the artificial intelligence application called Proje Sihirbazı.</p>
+            </li>
+            <li>
+                <h3>Oyun ve Uygulama Akademisi, Trainee</h3>
+                <span>Jan 2024 - Present</span>
+            </li>
+            <!-- Add more experiences as needed -->
+        </ul>
+    </section>
+
+    <section id="education">
+        <h2>Education</h2>
+        <p>Manisa Celal Bayar University, Bachelor degree, Computer Engineering (Aug 2023 - Jun 2026)</p>
+        <p>Alanya Alaaddin Keykubat University, Bachelor degree, Computer Engineering (Sep 2021 - Aug 2023)</p>
+    </section>
+
+    <section id="projects">
+        <h2>Projects</h2>
+        <ul id="project-list">
+            <!-- Projects will be loaded here -->
+        </ul>
+    </section>
+
+    <section id="contact">
+        <h2>Contact</h2>
+        <p>Address: Yaylacık, Yavuz Sultan Selim Cd. 17-13, 35400 Buca Osb/Buca/İzmir</p>
+        <p>Phone: +905309495084</p>
+        <p>Email: <a href="mailto:atasun35@gmail.com">atasun35@gmail.com</a></p>
+        <div class="social-links">
+            <a href="https://www.linkedin.com/in/erenatasun" target="_blank">LinkedIn</a>
+            <a href="https://github.com/ErenAtasun" target="_blank">GitHub</a>
         </div>
-        <div class="section technical-skills">
-            <h2>Technical Skills</h2>
-            <ul>
-                <li>Unity/C#, Grid Systems</li>
-                <li>Java, Data Structures</li>
-                <li>Python</li>
-                <li>Flutter</li>
-                <li>C</li>
-            </ul>
-        </div>
-        <div class="section personal-skills">
-            <h2>Personal Skills</h2>
-            <ul>
-                <li>Leadership for non-experienced team members</li>
-                <li>Planning, designing, and implementing features</li>
-                <li>Translating business requirements to technical concepts</li>
-                <li>Breaking down problems and estimating necessary efforts</li>
-                <li>Fast prototype generation and visual creation</li>
-                <li>Adaptability to changing environments and requirements</li>
-            </ul>
-        </div>
-        <div class="section languages">
-            <h2>Languages</h2>
-            <ul>
-                <li>Turkish (Native)</li>
-                <li>English (Fluent)</li>
-            </ul>
-        </div>
-        <div class="section education">
-            <h2>Education</h2>
-            <ul>
-                <li>Manisa Celal Bayar University - Bachelor degree, Computer Engineering (Aug 2023 - Jun 2026)</li>
-                <li>Alanya Alaaddin Keykubat University - Bachelor degree, Computer Engineering (Sep 2021 - Aug 2023)</li>
-            </ul>
-        </div>
-        <div class="section work-experience">
-            <h2>Work Experience</h2>
-            <ul>
-                <li>ENM Digital, Intern (May 2024 - Present)</li>
-                <li>Oyun ve Uygulama Akademisi, Trainee (Jan 2024 - Present)</li>
-                <li>Velo Games Studios, Intern (Jan 2024 - Present)</li>
-                <li>Dijital Oyun Geliştirme Ekibi CBU, Lead (Nov 2023 - Present, Manisa, Turkey)</li>
-                <li>Game Factory, Campus Ambassador (Aug 2023 - Present)</li>
-                <li>Codeo, Intern (Aug 2023 - Sep 2023, Izmir, Turkey)</li>
-                <li>GFC ALKU, Core Team Member (Oct 2022 - Sep 2023, Alanya, Antalya, Turkey)</li>
-            </ul>
-        </div>
-    </div>
+    </section>
+
     <footer>
-        &copy; 2024 Eren Atasun
+        <p>&copy; 2024 Eren Atasun. All rights reserved.</p>
     </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
