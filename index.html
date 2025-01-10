@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eren Atasun - CV</title>
+    <title>Eren Atasun - Portfolio</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <header>
@@ -14,8 +15,8 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#skills">Skills</a></li>
                 <li><a href="#experience">Experience</a></li>
-                <li><a href="#education">Education</a></li>
                 <li><a href="#projects">Projects</a></li>
+                <li><a href="#demos">Game Demos</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -28,7 +29,7 @@
 
     <section id="about">
         <h2>About Me</h2>
-        <p>I am a student of Computer Engineering at Manisa Celal Bayar University. I have experience in game development, especially using the Unity engine...</p>
+        <p>I am a Computer Engineering student with expertise in Unity game development and software engineering...</p>
         <a href="Assets/CV(ErenAtasun).pdf" download>Download CV</a>
     </section>
 
@@ -69,38 +70,88 @@
                 <h3>Oyun ve Uygulama Akademisi, Trainee</h3>
                 <span>Jan 2024 - Present</span>
             </li>
-            <!-- Add more experiences as needed -->
         </ul>
-    </section>
-
-    <section id="education">
-        <h2>Education</h2>
-        <p>Manisa Celal Bayar University, Bachelor degree, Computer Engineering (Aug 2023 - Jun 2026)</p>
-        <p>Alanya Alaaddin Keykubat University, Bachelor degree, Computer Engineering (Sep 2021 - Aug 2023)</p>
     </section>
 
     <section id="projects">
         <h2>Projects</h2>
         <ul id="project-list">
-            <!-- Projects will be loaded here -->
+            <!-- Projects will be dynamically loaded -->
         </ul>
+    </section>
+
+    <section id="demos">
+        <h2>Game Demos</h2>
+        <div class="demo-container">
+            <canvas id="game-demo" width="600" height="400"></canvas>
+            <p>Click the canvas to start the demo!</p>
+        </div>
+        <script>
+            const canvas = document.getElementById('game-demo');
+            const ctx = canvas.getContext('2d');
+
+            let x = 50, y = 50, dx = 2, dy = 2;
+
+            function drawBall() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.beginPath();
+                ctx.arc(x, y, 20, 0, Math.PI * 2);
+                ctx.fillStyle = "#0095DD";
+                ctx.fill();
+                ctx.closePath();
+                x += dx;
+                y += dy;
+
+                if (x + dx > canvas.width || x + dx < 0) dx = -dx;
+                if (y + dy > canvas.height || y + dy < 0) dy = -dy;
+            }
+
+            canvas.addEventListener('click', () => {
+                setInterval(drawBall, 10);
+            });
+        </script>
     </section>
 
     <section id="contact">
         <h2>Contact</h2>
-        <p>Address: Yaylacık, Yavuz Sultan Selim Cd. 17-13, 35400 Buca Osb/Buca/İzmir</p>
+        <p>Address: Yaylacık, Yavuz Sultan Selim Cd. 17-13, 35400 Buca Osb/Buca/Izmir</p>
         <p>Phone: +905309495084</p>
         <p>Email: <a href="mailto:atasun35@gmail.com">atasun35@gmail.com</a></p>
         <div class="social-links">
-            <a href="https://www.linkedin.com/in/erenatasun" target="_blank">LinkedIn</a>
-            <a href="https://github.com/ErenAtasun" target="_blank">GitHub</a>
+            <a href="https://www.linkedin.com/in/erenatasun" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="https://github.com/ErenAtasun" target="_blank"><i class="fab fa-github"></i></a>
         </div>
+        <form action="https://formspree.io/f/your-form-id" method="POST">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" required></textarea>
+            <button type="submit">Send</button>
+        </form>
     </section>
 
     <footer>
         <p>&copy; 2024 Eren Atasun. All rights reserved.</p>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        // Dynamically fetch and display GitHub projects
+        fetch('https://api.github.com/users/ErenAtasun/repos')
+            .then(response => response.json())
+            .then(data => {
+                const projectList = document.getElementById('project-list');
+                data.forEach(repo => {
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <h3>${repo.name}</h3>
+                        <p>${repo.description || 'No description available.'}</p>
+                        <a href="${repo.html_url}" target="_blank">View on GitHub</a>
+                    `;
+                    projectList.appendChild(listItem);
+                });
+            });
+    </script>
 </body>
 </html>
