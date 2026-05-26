@@ -21,6 +21,15 @@
         if (p.image) {
             return `<div class="card-media"><img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.title)}" loading="lazy" /></div>`;
         }
+        // Auto-fallback: GitHub Open Graph social preview when a github link exists
+        const gh = p.links && p.links.github;
+        if (gh) {
+            const m = gh.match(/github\.com\/([^/]+)\/([^/?#]+)/i);
+            if (m) {
+                const og = `https://opengraph.githubassets.com/1/${m[1]}/${m[2]}`;
+                return `<div class="card-media"><img src="${og}" alt="${escapeHtml(p.title)}" loading="lazy" onerror="this.parentElement.innerHTML='// preview coming soon'" /></div>`;
+            }
+        }
         return `<div class="card-media">// preview coming soon</div>`;
     }
 
