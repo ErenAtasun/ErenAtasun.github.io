@@ -7,21 +7,26 @@
     <meta property="og:title" content="Eren Atasun — Game Developer & Computer Engineer" />
     <meta property="og:description" content="Games, simulations, AI tools and engines — built across studio internships and graduation projects." />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://erenatasun.github.io/Assets/ErenAtasun.jpg" />
+    <meta name="theme-color" content="#0a0a0f" />
     <title>Eren Atasun — Game Developer & Computer Engineer</title>
 
+    <script>document.documentElement.classList.add('js');</script>
+    <link rel="icon" href="Assets/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/home.css" />
-    <link rel="stylesheet" href="css/projects.css" />
+    <link rel="stylesheet" href="css/main.css?v=4" />
+    <link rel="stylesheet" href="css/home.css?v=4" />
+    <link rel="stylesheet" href="css/projects.css?v=4" />
 </head>
 <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
         <div class="container nav">
             <a href="index.html" class="nav-brand">Eren<span>.</span>Atasun</a>
-            <nav>
+            <nav aria-label="Main">
                 <ul class="nav-links" id="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="index.html#about">About</a></li>
@@ -31,13 +36,13 @@
                     <li><a href="index.html#contact">Contact</a></li>
                 </ul>
             </nav>
-            <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+            <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
                 <i class="fa-solid fa-bars"></i>
             </button>
         </div>
     </header>
 
-    <main>
+    <main id="main">
         <!-- Hero -->
         <section class="hero">
             <div class="container hero-inner">
@@ -56,10 +61,21 @@
                         <a href="Assets/CV-ErenAtasun.pdf" class="btn btn-secondary" download>
                             <i class="fa-solid fa-download"></i> Download CV
                         </a>
+                        <div class="hero-social">
+                            <a href="https://github.com/erenatasun" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                            <a href="https://www.linkedin.com/in/erenatasun" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="mailto:atasun35@gmail.com" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
                     </div>
+                    <dl class="hero-stats">
+                        <div><dt>Projects</dt><dd data-project-count>30</dd></div>
+                        <div><dt>Internships</dt><dd>6</dd></div>
+                        <div><dt>Events organized</dt><dd>20+</dd></div>
+                        <div><dt>Game jams hosted</dt><dd>3</dd></div>
+                    </dl>
                 </div>
                 <div class="hero-portrait">
-                    <img src="Assets/ErenAtasun.jpg" alt="Eren Atasun" />
+                    <img src="Assets/ErenAtasun.jpg" alt="Portrait of Eren Atasun" width="280" height="280" />
                 </div>
             </div>
         </section>
@@ -92,12 +108,12 @@
             <div class="container container-narrow">
                 <div class="section-title"><h2>Education</h2></div>
                 <ul class="timeline">
-                    <li class="timeline-item">
+                    <li class="timeline-item reveal">
                         <h3>Manisa Celal Bayar University</h3>
                         <div class="meta">Sep 2023 – 2026 · Manisa, Turkey</div>
                         <p>Bachelor's Degree in Computer Engineering.</p>
                     </li>
-                    <li class="timeline-item">
+                    <li class="timeline-item reveal">
                         <h3>Alanya Alaaddin Keykubat University</h3>
                         <div class="meta">Sep 2021 – 2023 · Alanya, Turkey</div>
                         <p>Bachelor's Degree in Computer Engineering — transfer.</p>
@@ -163,13 +179,14 @@
         <!-- Featured projects -->
         <section class="section" id="featured">
             <div class="container">
-                <div class="section-title"><h2>Featured Projects</h2></div>
-                <div class="featured-grid projects-grid" id="featured-projects">
+                <div class="section-head">
+                    <div class="section-title"><h2>Featured Projects</h2></div>
+                    <a class="btn btn-secondary" href="projects.html">All <span data-project-count>30</span> projects <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+                <p class="section-lead">A few highlights — click any card for screenshots, my role and the tech behind it.</p>
+                <div class="projects-grid" id="featured-projects">
                     <!-- Populated by js/projects-render.js -->
                 </div>
-                <p style="margin-top: var(--space-6);">
-                    <a href="projects.html">See all projects <i class="fa-solid fa-arrow-right"></i></a>
-                </p>
             </div>
         </section>
 
@@ -178,37 +195,37 @@
             <div class="container container-narrow">
                 <div class="section-title"><h2>Experience</h2></div>
                 <ul class="timeline">
-                    <li class="timeline-item">
+                    <li class="timeline-item reveal">
                         <h3>Bluesense — Computer Engineering Intern</h3>
                         <div class="meta">Jan 2026 – Present · Boston, USA</div>
                         <p>Contributing to both UI and AI teams: building responsive interfaces and integrating intelligent system components into production workflows. Working remotely in a cross-functional agile environment.</p>
                     </li>
-                    <li class="timeline-item">
+                    <li class="timeline-item reveal">
                         <h3>HIFIVE — Game Developer Intern</h3>
                         <div class="meta">Jan 2026 – Present · İstanbul, Turkey</div>
                         <p>Shipping core gameplay mechanics, system architecture and performance tuning across two game projects in parallel. Collaborating with marketing on positioning and player engagement strategy.</p>
                     </li>
-                    <li class="timeline-item">
+                    <li class="timeline-item reveal">
                         <h3>XRLAB — Game Developer Intern</h3>
                         <div class="meta">Apr 2025 – Sep 2025 · Manisa, Turkey</div>
                         <p>Engineered C++-based real-time simulation systems focused on performance optimization, low-latency execution, and hardware–software integration. Built modular components that improved runtime stability and reduced latency in simulation pipelines.</p>
                     </li>
-                    <li class="timeline-item">
+                    <li class="timeline-item reveal">
                         <h3>ENM Digital — Computer Engineering Intern</h3>
                         <div class="meta">Apr 2024 – Sep 2024 · Manisa, Turkey</div>
                         <p>Implemented core NLP and automation features for the AI application <em>Proje Sihirbazı</em>. Contributed to full-stack team projects across web and mobile.</p>
                     </li>
-                    <li class="timeline-item">
+                    <li class="timeline-item reveal">
                         <h3>Oyun ve Uygulama Akademisi — Trainee</h3>
                         <div class="meta">Jan 2024 – Sep 2024</div>
                         <p>Structured Unity mentorship — gameplay programming, plus startup management and product commercialization for game studios. Expanded my professional network across the game-dev and entrepreneurship ecosystem.</p>
                     </li>
-                    <li class="timeline-item">
+                    <li class="timeline-item reveal">
                         <h3>Velo Games Studios — Game Developer Intern</h3>
                         <div class="meta">Jan 2024 – Jul 2024</div>
                         <p>Delivered multiple game prototypes (Subway Surfers-style, Candy Crush-style) under the mentorship of senior developer Tolga Karanlıkoğlu. Designed and built a C# book-library management system applying OOP design patterns.</p>
                     </li>
-                    <li class="timeline-item">
+                    <li class="timeline-item reveal">
                         <h3>Codeo — Game Developer Intern</h3>
                         <div class="meta">Aug 2023 – Sep 2023 · İzmir, Turkey</div>
                         <p>Implemented tile-based grid and lock systems in Unity, enforcing SOLID principles across the codebase to keep game logic maintainable.</p>
@@ -222,27 +239,27 @@
             <div class="container container-narrow">
                 <div class="section-title"><h2>Community &amp; Leadership</h2></div>
                 <ul class="timeline">
-                    <li class="timeline-item">
+                    <li class="timeline-item reveal">
                         <h3>Oyun Tasarımı ve Geliştiricileri Topluluğu — Lead</h3>
                         <div class="meta">Sep 2024 – Present</div>
                         <p>Leading a student game-development community: organized 20+ technical events and 3 game jams. Managing 3 GSB (ÜNİDES) funded projects with 250,000 TL+ budget across cross-functional student teams.</p>
                     </li>
-                    <li class="timeline-item">
+                    <li class="timeline-item reveal">
                         <h3>100sClub — Campus Leader</h3>
                         <div class="meta">Jul 2024 – Sep 2025</div>
                         <p>Represented 100sClub on campus, attending leadership and entrepreneurship trainings while expanding a national student professional network.</p>
                     </li>
-                    <li class="timeline-item">
+                    <li class="timeline-item reveal">
                         <h3>Talentia Union — Community Manager</h3>
                         <div class="meta">May 2024 – Sep 2025</div>
                         <p>Structured community operations and led event planning, improving organizational efficiency and member engagement.</p>
                     </li>
-                    <li class="timeline-item">
+                    <li class="timeline-item reveal">
                         <h3>Dijital Oyun Geliştirme Ekibi CBU — Founder Lead</h3>
                         <div class="meta">Nov 2023 – Sep 2024</div>
                         <p>Founded my university's first dedicated game-development community — established team structure, organized events, and cultivated a collaborative culture among student developers.</p>
                     </li>
-                    <li class="timeline-item">
+                    <li class="timeline-item reveal">
                         <h3>Game Factory — Campus Ambassador</h3>
                         <div class="meta">Aug 2023 – Sep 2024</div>
                         <p>Built and managed a Game Factory ambassador community, organizing industry-aligned events and serving as the primary liaison between the company and student developers.</p>
@@ -255,19 +272,32 @@
         <section class="section" id="contact">
             <div class="container container-narrow">
                 <div class="section-title"><h2>Contact</h2></div>
-                <p>The fastest way to reach me is email or LinkedIn.</p>
+                <p>Open to internships, full-time roles and game-jam teams. The fastest way to reach me is email or LinkedIn.</p>
                 <div class="contact-grid">
-                    <div class="contact-item">
+                    <a class="contact-item reveal" href="mailto:atasun35@gmail.com">
+                        <i class="fa-solid fa-envelope"></i>
                         <span class="label">Email</span>
-                        <a class="value" href="mailto:atasun35@gmail.com">atasun35@gmail.com</a>
-                    </div>
-                    <div class="contact-item">
+                        <span class="value">atasun35@gmail.com</span>
+                    </a>
+                    <a class="contact-item reveal" href="https://www.linkedin.com/in/erenatasun" target="_blank" rel="noopener">
+                        <i class="fab fa-linkedin-in"></i>
+                        <span class="label">LinkedIn</span>
+                        <span class="value">in/erenatasun</span>
+                    </a>
+                    <a class="contact-item reveal" href="https://github.com/erenatasun" target="_blank" rel="noopener">
+                        <i class="fab fa-github"></i>
+                        <span class="label">GitHub</span>
+                        <span class="value">github.com/erenatasun</span>
+                    </a>
+                    <a class="contact-item reveal" href="tel:+905309495084">
+                        <i class="fa-solid fa-phone"></i>
                         <span class="label">Phone</span>
-                        <a class="value" href="tel:+905309495084">+90 530 949 50 84</a>
-                    </div>
-                    <div class="contact-item">
+                        <span class="value">+90 530 949 50 84</span>
+                    </a>
+                    <div class="contact-item reveal">
+                        <i class="fa-solid fa-location-dot"></i>
                         <span class="label">Location</span>
-                        <span class="value">Izmir, Turkey</span>
+                        <span class="value">İzmir, Turkey</span>
                     </div>
                 </div>
             </div>
@@ -285,8 +315,8 @@
         </div>
     </footer>
 
-    <script src="js/projects-data.js"></script>
-    <script src="js/projects-render.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/projects-data.js?v=4"></script>
+    <script src="js/projects-render.js?v=4"></script>
+    <script src="js/main.js?v=4"></script>
 </body>
 </html>

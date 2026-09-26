@@ -3,21 +3,29 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Projects by Eren Atasun — Unity games, simulations, AI tools and mobile apps." />
+    <meta name="description" content="Projects by Eren Atasun — Unity games, simulations, AI tools, engines and mobile apps, with screenshots and details." />
+    <meta name="theme-color" content="#0a0a0f" />
+    <meta property="og:title" content="Projects — Eren Atasun" />
+    <meta property="og:description" content="Unity games, simulations, AI tools, a C++ engine and mobile apps — with screenshots and details." />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://erenatasun.github.io/Assets/projects/this-is-blast/2.webp" />
     <title>Projects — Eren Atasun</title>
 
+    <script>document.documentElement.classList.add('js');</script>
+    <link rel="icon" href="Assets/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link rel="stylesheet" href="css/main.css" />
-    <link rel="stylesheet" href="css/projects.css" />
+    <link rel="stylesheet" href="css/main.css?v=4" />
+    <link rel="stylesheet" href="css/projects.css?v=4" />
 </head>
 <body>
+    <a class="skip-link" href="#main">Skip to content</a>
     <header class="site-header">
         <div class="container nav">
             <a href="index.html" class="nav-brand">Eren<span>.</span>Atasun</a>
-            <nav>
+            <nav aria-label="Main">
                 <ul class="nav-links" id="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="index.html#about">About</a></li>
@@ -27,30 +35,62 @@
                     <li><a href="index.html#contact">Contact</a></li>
                 </ul>
             </nav>
-            <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+            <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
                 <i class="fa-solid fa-bars"></i>
             </button>
         </div>
     </header>
 
-    <main>
+    <main id="main">
         <section class="page-header">
             <div class="container">
-                <div class="section-title"><h1>Projects</h1></div>
+                <span class="eyebrow">// Portfolio</span>
+                <h1>Projects</h1>
                 <p>
-                    A categorized look at things I've built — from Unity games to AI tools.
-                    Use the filters below to narrow down by category.
+                    Games, simulations, AI tools, a C++ engine and mobile apps — from studio case
+                    studies and game jams to funded research. Open any project for screenshots,
+                    my role, key highlights and source code.
                 </p>
+                <div class="stats-row" id="projects-stats" aria-label="Portfolio at a glance">
+                    <!-- populated by JS -->
+                </div>
             </div>
         </section>
 
-        <section class="section" style="padding-top: 0;">
+        <section class="section section--tight">
             <div class="container">
-                <div class="filter-bar" id="projects-filters">
-                    <!-- filter chips populated by JS -->
+                <div class="toolbar" id="projects-toolbar">
+                    <div class="toolbar__row">
+                        <label class="search-field">
+                            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+                            <span class="sr-only">Search projects</span>
+                            <input type="search" id="project-search" placeholder="Search by name, tech or keyword (e.g. Unity, Flutter, AI)" autocomplete="off" />
+                        </label>
+                        <label class="sort-field">
+                            <span class="sr-only">Sort projects</span>
+                            <i class="fa-solid fa-arrow-down-wide-short" aria-hidden="true"></i>
+                            <select id="project-sort">
+                                <option value="featured">Highlights first</option>
+                                <option value="newest">Newest first</option>
+                                <option value="az">A – Z</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="filter-bar" id="projects-filters" role="group" aria-label="Filter by category">
+                        <!-- filter chips populated by JS -->
+                    </div>
                 </div>
+
+                <p class="results-count" id="projects-count" aria-live="polite"></p>
+
                 <div class="projects-grid" id="projects-gallery">
                     <!-- project cards populated by JS -->
+                </div>
+
+                <div class="empty-state" id="projects-empty" hidden>
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <p>No projects match your search.</p>
+                    <button type="button" class="btn btn-secondary" data-reset-filters>Clear filters</button>
                 </div>
             </div>
         </section>
@@ -67,8 +107,8 @@
         </div>
     </footer>
 
-    <script src="js/projects-data.js"></script>
-    <script src="js/projects-render.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/projects-data.js?v=4"></script>
+    <script src="js/projects-render.js?v=4"></script>
+    <script src="js/main.js?v=4"></script>
 </body>
 </html>
