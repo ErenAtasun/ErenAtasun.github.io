@@ -812,3 +812,60 @@ body.modal-open { overflow: hidden; }
     .project-modal,
     .project-modal__card { transition: none; }
 }
+
+/* ============================================
+   Studio badge + development status
+   ============================================ */
+.card-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.card-studio {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: linear-gradient(90deg, rgba(249, 115, 22, 0.16), rgba(249, 115, 22, 0.04));
+    border: 1px solid rgba(249, 115, 22, 0.45);
+    border-radius: var(--radius-full);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #fb923c;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    width: fit-content;
+}
+.card-studio i { font-size: 0.68rem; }
+.status-tag {
+    position: absolute;
+    left: var(--space-3);
+    bottom: var(--space-3);
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 4px 10px;
+    background: rgba(10, 10, 15, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--radius-full);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+.status-tag--inline { position: static; backdrop-filter: none; background: var(--bg-elevated); }
+.status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+    animation: statusPulse 2s ease-in-out infinite;
+}
+@keyframes statusPulse {
+    50% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+}
+@media (prefers-reduced-motion: reduce) { .status-dot { animation: none; } }

@@ -3,7 +3,7 @@
    ============================================
    Add / edit projects here. Changes propagate to:
    - projects.html (gallery, search, filters, detail modal)
-   - index.html (featured cards, when `featured: true`)
+   - index.html (featured cards, when `featured` is set)
 
    Fields
    - id          unique slug; also the deep link (projects.html#<id>)
@@ -15,13 +15,17 @@
    - date        display label (e.g. "GGJ 2024", "2025")
    - year        number, used for "Newest" sorting (optional)
    - program     gold badge for funding / competitions / theses (optional)
+   - studio      studio badge, e.g. 'PBH Studio' (optional)
+   - status      e.g. 'In development' (optional, shown on the card)
    - stack       tech badges
    - image       cover image; falls back to a generated category cover
    - imageFit    'contain' for portrait / phone screenshots (optional)
    - gallery     extra screenshots shown in the modal viewer
-   - videos      YouTube / Vimeo / .mp4 URLs embedded in the modal
-   - links       { github, demo, video, doc }
-   - featured    show on the home page
+   - videos      YouTube / Vimeo / Drive / .mp4 URLs embedded in the modal
+   - links       { github, demo, video, doc, site, page }
+   - featured    number = position on the home page (1 first); omit to hide there
+   - tr          Turkish overrides for: title, summary, description, highlights,
+                 role, team, date, status. Missing fields fall back to English.
 
    ─── Adding photos ───
    1. Drop images into Assets/projects/<project-id>/
@@ -38,19 +42,106 @@ function gallery(id, files) {
     return (files || []).map((f) => media(id, f));
 }
 
+const PBH_SITE = 'https://erenatasun.github.io/pbh-studio-website/';
+
 const CATEGORIES = {
-    'games':         { label: 'Games',           icon: 'fa-gamepad',       hue: 265 },
-    'engine-tools':  { label: 'Engines & Tools', icon: 'fa-gears',         hue: 190 },
-    'ai-ml':         { label: 'AI / ML',         icon: 'fa-robot',         hue: 320 },
-    'iot-hardware':  { label: 'IoT / Hardware',  icon: 'fa-microchip',     hue: 150 },
-    'mobile':        { label: 'Mobile',          icon: 'fa-mobile-screen', hue: 215 },
-    'research':      { label: 'Research',        icon: 'fa-flask',         hue: 35 },
-    'academic':      { label: 'Academic',        icon: 'fa-graduation-cap', hue: 240 },
-    'leadership':    { label: 'Leadership',      icon: 'fa-users',         hue: 170 },
+    'games':         { label: 'Games',           tr: 'Oyunlar',           icon: 'fa-gamepad',        hue: 265 },
+    'engine-tools':  { label: 'Engines & Tools', tr: 'Motorlar & Araçlar', icon: 'fa-gears',          hue: 190 },
+    'ai-ml':         { label: 'AI / ML',         tr: 'Yapay Zekâ',         icon: 'fa-robot',          hue: 320 },
+    'research':      { label: 'Research',        tr: 'Araştırma',          icon: 'fa-flask',          hue: 35 },
+    'iot-hardware':  { label: 'IoT / Hardware',  tr: 'IoT / Donanım',      icon: 'fa-microchip',      hue: 150 },
+    'mobile':        { label: 'Mobile',          tr: 'Mobil',              icon: 'fa-mobile-screen',  hue: 215 },
+    'web':           { label: 'Web',             tr: 'Web',                icon: 'fa-globe',          hue: 20 },
+    'academic':      { label: 'Academic',        tr: 'Akademik',           icon: 'fa-graduation-cap', hue: 240 },
+    'leadership':    { label: 'Leadership',      tr: 'Liderlik',           icon: 'fa-users',          hue: 170 },
 };
 
 const PROJECTS = [
     /* ─── Games ───────────────────────────────────────────── */
+    {
+        id: 'pawed-drive',
+        title: 'Pawed Drive',
+        category: 'games',
+        studio: 'PBH Studio',
+        status: 'In development',
+        summary: 'Four cats, one car, no plan — online & couch co-op driving comedy where nobody controls the whole car.',
+        description: 'Pawed Drive is the flagship game of PBH Studio, the indie studio I co-founded. Four cats drive one beat-up car from city to city taking pizza delivery jobs. One steers, one works the gas and brake, one handles a stubborn manual gearbox, and one sits in the back seat with the phone — the only place the map exists. Talk to each other and the pizza arrives hot; don\'t, and the car ends up in a wall.\n\nThe design is built on information asymmetry: no single player has the full picture, so the game forces players to communicate. Every evening the money goes on the garage table for repairs and upgrades — with no vetoes. Development follows a phased, playtest-gated roadmap where every phase has a "kill question" that must be answered before moving on.',
+        highlights: [
+            'Split 4-role control of one car (steering / gas & brake / manual gearbox / navigator) for 1–4 players, mixed keyboard and gamepads with automatic role assignment',
+            'Arcade vehicle physics with an RPM model and "perfect shift" timing, traction, drift and crash hit-stop feedback',
+            'Online co-op with Netcode for GameObjects: host-authoritative physics, players send role inputs; Unity Relay with join codes (no port forwarding) and in-game voice chat',
+            'Delivery mission loop, day structure, shared money, garage upgrade shop, damage & repair, achievements',
+            'Bilingual (TR/EN) UI, lobby, emote wheel, first-day guide',
+            'Data-driven tuning with ScriptableObject gear profiles; ~75 C# scripts (~30k lines)',
+        ],
+        role: 'Co-founder, lead developer — vehicle physics, netcode, game systems, design',
+        team: 'PBH Studio (2 co-founders)',
+        date: '2026 – present',
+        year: 2026,
+        stack: ['Unity', 'C#', 'Netcode for GameObjects', 'Unity Relay', 'URP', 'Co-op'],
+        image: media('pawed-drive', 'cover.webp'),
+        gallery: gallery('pawed-drive', ['cover.webp', '1.webp', '2.webp', '3.webp']),
+        links: { page: PBH_SITE + 'games/pawed-drive/' },
+        featured: 1,
+        tr: {
+            status: 'Geliştiriliyor',
+            summary: 'Dört kedi, bir araba, sıfır plan — kimsenin arabanın tamamını kontrol etmediği online ve aynı ekran co-op sürüş komedisi.',
+            description: 'Pawed Drive, kurucu ortağı olduğum bağımsız stüdyo PBH Studio\'nun ana oyunu. Dört kedi eski püskü bir arabayla şehir şehir dolaşıp pizza teslimatı yapıyor. Biri direksiyonda, biri gazda ve frende, biri inatçı manuel viteste, biri de arka koltukta telefona bakıyor — haritanın bulunduğu tek yer orası. Konuşursanız pizza sıcak gider; konuşmazsanız araba duvara.\n\nTasarım bilgi asimetrisi üzerine kurulu: hiçbir oyuncu resmin tamamını görmüyor, bu yüzden oyun iletişimi zorunlu kılıyor. Her akşam kasa garajdaki masaya konuyor; tamir ve geliştirmelere harcanıyor — veto hakkı yok. Geliştirme, her fazın bir "kill sorusu"yla kapandığı, playtest odaklı aşamalı bir yol haritasıyla ilerliyor.',
+            highlights: [
+                'Tek arabanın 4 role bölünmüş kontrolü (direksiyon / gaz-fren / manuel vites / navigatör); 1–4 oyuncu, klavye + gamepad karışık, rollerin otomatik dağıtımı',
+                'RPM modeli ve "perfect shift" zamanlamasına sahip arcade araç fiziği; çekiş, drift ve çarpışmada hit-stop geri bildirimi',
+                'Netcode for GameObjects ile online co-op: host-otoriter fizik, oyuncular rol girdisi gönderir; join code ile Unity Relay (port yönlendirmesiz) ve oyun içi sesli sohbet',
+                'Teslimat görev döngüsü, gün yapısı, ortak kasa, garaj geliştirme mağazası, hasar ve tamir, başarımlar',
+                'İki dilli (TR/EN) arayüz, lobi, emote çarkı, ilk gün rehberi',
+                'ScriptableObject vites profilleriyle veri odaklı ayar; ~75 C# script (~30 bin satır)',
+            ],
+            role: 'Kurucu ortak, baş geliştirici — araç fiziği, netcode, oyun sistemleri, tasarım',
+            team: 'PBH Studio (2 kurucu ortak)',
+            date: '2026 – günümüz',
+        },
+    },
+    {
+        id: 'aftershock-isle',
+        title: 'Aftershock: Isle',
+        category: 'games',
+        studio: 'PBH Studio',
+        summary: 'Post-earthquake survival base-builder: keep a cracked building standing through aftershocks, floods and fires.',
+        description: 'A 2.5D side-view crisis-management and survival base-builder set in a city hit by an earthquake — "This War of Mine" atmosphere meets "Oxygen Not Included"-style active-pause crisis management. Survivors shelter in a four-storey building seen in cross-section; every in-game day runs through morning maintenance and crafting, a midday expedition into the ruined city, and a night of disasters.\n\nThe building itself is the main character: a Structural Integrity bar drains from aftershocks, basement flooding and fires, and hits zero when the building collapses. To win, the team upgrades the workbench to tier 3, repairs the rooftop radio, clears the helipad and holds a 60-second evacuation signal. Built as a game jam project with my studio partner, from a full Game Design Document to a playable build.',
+        highlights: [
+            'Disaster director with a schedule: aftershocks with a 6-second "Triangle of Life" warning, basement flooding with electrocution hazard, fires, gas leaks and weather',
+            'Structural integrity model: cracked columns break in aftershocks and double the damage; steel reinforcement absorbs it; flooding and fire drain the building over time',
+            'Active pause (time scale 0) with 1×/2× speed, survivor tasks, stress, hunger and traits, 3-branch skill tree',
+            'Node-based city map expeditions with combat, a companion dog, loot bags and survivor rescues',
+            'Workbench crafting tiers, power grid, resource storage, JSON save system with daily autosave',
+            'Decoupled architecture (type-based EventBus), A* grid pathfinding; ~150 C# scripts (~38k lines)',
+            'Outdoor 3D kit generated procedurally with Blender Python scripts and editor tools that rebuild it in Unity',
+        ],
+        role: 'Lead programmer & game designer (GDD)',
+        team: 'PBH Studio (2 people)',
+        date: 'Game jam · Oct 2026',
+        year: 2026,
+        stack: ['Unity', 'C#', 'URP', 'A* Pathfinding', 'Blender Python', 'Game Design'],
+        image: media('aftershock-isle', 'cover.webp'),
+        gallery: gallery('aftershock-isle', ['cover.webp', '1.webp', '2.webp', '3.webp', '4.webp']),
+        links: { github: 'https://github.com/erenatasun/AftershockIsle' },
+        featured: 2,
+        tr: {
+            summary: 'Deprem sonrası hayatta kalma ve üs kurma: çatlamış bir binayı artçılar, su baskını ve yangınlara karşı ayakta tut.',
+            description: 'Depremle yıkılmış bir şehirde geçen 2.5D yandan görünüm kriz yönetimi ve hayatta kalma oyunu — "This War of Mine" atmosferi ile "Oxygen Not Included" tarzı aktif duraklatmalı kriz yönetiminin buluşması. Kazazedeler, kesit olarak görülen dört katlı bir binada sığınıyor; her oyun günü sabah bakım ve üretim, öğlen yıkık şehre sefer ve gece afet baskısından oluşuyor.\n\nAsıl karakter binanın kendisi: Yapısal Bütünlük barı artçı sarsıntılar, bodrumdaki su baskını ve yangınlarla eriyor; sıfıra indiğinde bina çöküyor. Kazanmak için tezgâhı 3. kademeye yükseltmek, çatıdaki telsizi onarmak, pisti temizlemek ve 60 saniye kesintisiz tahliye sinyali vermek gerekiyor. Stüdyo ortağımla bir game jam projesi olarak, tam bir oyun tasarım dokümanından (GDD) oynanabilir bir sürüme kadar geliştirildi.',
+            highlights: [
+                'Takvimli afet yöneticisi: 6 saniyelik "Yaşam Üçgeni" uyarılı artçılar, elektrik çarpma riski taşıyan su baskını, yangın, gaz kaçağı ve hava durumu',
+                'Yapısal bütünlük modeli: çatlak kolonlar artçıda kırılıp hasarı ikiye katlar; çelik takviye hasarı emer; su ve yangın binayı zamanla eritir',
+                'Aktif duraklatma (time scale 0) ve 1×/2× hız; kazazede görevleri, stres, açlık ve özellikler; 3 dallı yetenek ağacı',
+                'Nod tabanlı şehir haritasında seferler: çatışma, yardımcı köpek, ganimet çantası ve kazazede kurtarma',
+                'Tezgâh üretim kademeleri, elektrik şebekesi, kaynak deposu, günlük otomatik kayıtlı JSON kayıt sistemi',
+                'Gevşek bağlı mimari (tip tabanlı EventBus), A* grid yol bulma; ~150 C# script (~38 bin satır)',
+                'Blender Python script\'leriyle prosedürel üretilen dış mekân 3D kiti ve onu Unity\'de yeniden kuran editör araçları',
+            ],
+            role: 'Baş programcı & oyun tasarımcısı (GDD)',
+            team: 'PBH Studio (2 kişi)',
+            date: 'Game jam · Eki 2026',
+        },
+    },
     {
         id: 'stratis',
         title: 'Stratis (GP-I)',
@@ -71,7 +162,21 @@ const PROJECTS = [
         stack: ['Unity', 'C#', 'ML-Agents', 'Reinforcement Learning', 'PPO'],
         image: '', gallery: [],
         links: { github: 'https://github.com/erenatasun/STRATIS' },
-        featured: true,
+        featured: 3,
+        tr: {
+            title: 'Stratis (Bitirme-I)',
+            summary: 'Düşmanların PPO pekiştirmeli öğrenmeyle savaşmayı öğrendiği Unity taktik yapay zekâ simülasyonu.',
+            description: 'Stratis ilk bitirme projem: ML-Agents üzerine kurulu, Unity tabanlı bir taktik savaş simülasyonu. Düşman ajanlar Proximal Policy Optimization (PPO) ile eğitiliyor ve kural tabanlı davranışlarla birleştiriliyor; böylece sabit script\'leri izlemek yerine oyuncuya tepki verebiliyorlar.\n\nÇalışma tüm döngüyü kapsıyor — simülasyon ortamını kurmak, gözlem ve ödülleri tasarlamak, ajanları eğitmek ve eğitilmiş modelleri oynanabilir bir sahneye geri taşımak.',
+            highlights: [
+                'Unity ML-Agents ile PPO kullanarak düşman ajanların eğitimi',
+                'Hibrit davranış modeli: kural tabanlı taktikler + öğrenilmiş politikalar',
+                'Ajanlar için gerçek zamanlı algı sistemi (görüş / tespit)',
+                'Eğitim ve oynanış için atış mekanikleri ve savaş senaryoları',
+            ],
+            role: 'Tasarımcı & geliştirici — ortam, ajanlar, eğitim hattı',
+            team: 'Bireysel',
+            date: 'Bitirme Projesi I',
+        },
     },
     {
         id: 'this-is-blast',
@@ -96,33 +201,64 @@ const PROJECTS = [
         image: media('this-is-blast', '2.webp'),
         imageFit: 'contain',
         gallery: gallery('this-is-blast', ['1.webp', '2.webp', '3.webp', '4.webp', '5.webp', '6.webp']),
-        videos: [],
         links: {
             github: 'https://github.com/erenatasun/Hybrid-CasualPuzzelGame',
             video: 'https://drive.google.com/file/d/1ntuH9Ug8W-y26QE3PgUrSDCYYF41uMAF/view?usp=sharing',
         },
-        featured: true,
+        featured: 5,
+        tr: {
+            title: 'This Is Blast! — Hybrid-Casual Bulmaca',
+            summary: 'roof.games vaka çalışması için sunuma hazır mobil bulmaca: 13 çözülebilir seviye, 112 birim testi.',
+            description: 'Voodoo\'nun "This Is Blast!" oyunundan esinlenen, roof.games Game Developer Case için geliştirdiğim bir Unity vaka çalışması. Renkli toplar 7 şeritli bir kuyruktan 5 atış yuvasına çekiliyor ve aşağı inen blok duvarını eritiyor; aynı renkten üç top tek topta birleşiyor.\n\nBrif, prototip değil sunuma hazır hissettiren bir oyun istiyordu; bu yüzden kapsam bilinçli olarak dar tutuldu ve emek cilaya ve mimariye harcandı. Simülasyon anında sonuçlanıyor, görseller yalnızca zaten kesinleşmiş sonuçları oynatıyor — kurallar 112 birim testiyle kapsanan, motordan bağımsız bir assembly\'de yaşıyor.',
+            highlights: [
+                'Motordan bağımsız Core assembly (UnityEngine referansı yok), 112 birim testiyle kapsanıyor',
+                'Kazanan bir oyunu simüle ederek tahta kuran seviye üreteci — her seviyenin çözülebilir olduğu kanıtlı',
+                'Dayanıklı bloklar, taşlar ve çözülebilirliği asla bozmayan Shuffle / Recall güçlendiricileri',
+                'Meta katman: zamanla dolan canlar, coin, market',
+                '"Her özelliğin tek sahibi" animasyon kuralı — üç gerçek animasyon hatasını çözdü',
+                'Tüm sprite\'lar (SDF) ve ses efektleri kodla üretildi; özel seviye editörü',
+            ],
+            role: 'Bireysel geliştirici — oynanış, mimari, araçlar, testler',
+            team: 'Bireysel',
+            date: 'roof.games vaka çalışması · 2026',
+        },
     },
     {
         id: 'mask-heist',
         title: 'Mask Heist',
         category: 'games',
-        summary: 'Online multiplayer heist game from Global Game Jam 2026 — every mask grants a different power.',
-        description: 'A networked Unity heist game built during Global Game Jam 2026. Players pick up masks that grant special abilities, sneak around the level, hide loot and try to outplay each other.\n\nNetworking is built on Mirror: mask selection, invisibility and sprint states are synchronised across clients.',
+        studio: 'PBH Studio',
+        status: 'In development',
+        summary: 'Online hide-and-steal heist: one player hides the loot, everyone else puts on a mask and comes to steal it.',
+        description: 'Mask Heist started at Global Game Jam 2026 and is now in development at PBH Studio. Every round, one player becomes the Hider: they get a random piece of loot and half a minute to stash it somewhere on the map — in a drawer, behind a panel, down in the basement — and set traps along the way.\n\nThen the Seekers walk in. Each wears a mask with its own ability, and every mask can turn its wearer invisible for a few seconds. The Hider scores for every second the loot stays hidden and every Seeker caught in a trap; the Seekers score for finding it fast. After everyone has been the Hider once, the highest total wins.',
         highlights: [
-            'Online multiplayer with Mirror (SyncVars, NetworkBehaviours)',
+            'Round-based online multiplayer for up to 8 players with Mirror (SyncVars, NetworkBehaviours)',
             'Mask ability system: invisibility, decoy clone, scanner, tracker, sprinter, disruptor, silent',
-            'Loot pool, hideable items and spawn-point management',
+            'Hider tools: proximity mines and laser tripwires; loot pool, hideable items and spawn points',
             'Energy-bar based ability balancing',
         ],
         role: 'Gameplay & network programmer',
-        team: 'Game Jam team',
-        date: 'GGJ 2026',
+        team: 'PBH Studio',
+        date: 'GGJ 2026 – present',
         year: 2026,
         stack: ['Unity', 'C#', 'Mirror', 'Multiplayer', 'GGJ 2026'],
-        image: '', gallery: [],
-        links: { github: 'https://github.com/erenatasun/MaskHeist' },
-        featured: false,
+        image: media('mask-heist', 'cover.webp'),
+        gallery: [],
+        links: { github: 'https://github.com/erenatasun/MaskHeist', page: PBH_SITE + 'games/mask-heist/' },
+        tr: {
+            status: 'Geliştiriliyor',
+            summary: 'Online saklama-çalma oyunu: bir oyuncu ganimeti saklar, diğer herkes maskesini takıp onu çalmaya gelir.',
+            description: 'Mask Heist, Global Game Jam 2026\'da başladı ve şimdi PBH Studio\'da geliştiriliyor. Her turda bir oyuncu Saklayan olur: rastgele bir ganimet alır ve onu haritada bir yere — bir çekmeceye, bir panelin arkasına, bodruma — saklamak için yarım dakikası vardır; bu sırada tuzaklar da kurar.\n\nSonra Arayanlar içeri girer. Her birinin taktığı maskenin kendine özgü bir yeteneği vardır ve tüm maskeler birkaç saniyeliğine görünmezlik sağlar. Saklayan, ganimet saklı kaldığı her saniye ve tuzağa düşen her Arayan için puan alır; Arayanlar ise hızlı buldukça puan kazanır. Herkes bir kez Saklayan olduktan sonra en yüksek toplam kazanır.',
+            highlights: [
+                'Mirror ile 8 oyuncuya kadar tur bazlı online çok oyunculu (SyncVar, NetworkBehaviour)',
+                'Maske yetenek sistemi: görünmezlik, sahte kopya, tarayıcı, iz sürücü, koşucu, bozucu, sessiz',
+                'Saklayan araçları: yakınlık mayınları ve lazer tuzakları; ganimet havuzu, saklanabilir eşyalar ve doğma noktaları',
+                'Enerji barı tabanlı yetenek dengesi',
+            ],
+            role: 'Oynanış & ağ programcısı',
+            team: 'PBH Studio',
+            date: 'GGJ 2026 – günümüz',
+        },
     },
     {
         id: 'wordswipe',
@@ -146,7 +282,19 @@ const PROJECTS = [
         imageFit: 'contain',
         gallery: gallery('wordswipe', ['1.webp', '2.webp']),
         links: { github: 'https://github.com/erenatasun/WordSwipe' },
-        featured: false,
+        tr: {
+            summary: 'Playable Studios vaka çalışması için geliştirilen kaydırmalı mobil kelime bulmacası.',
+            description: 'Popüler kaydırmalı kelime oyunlarından esinlenen bir mobil bulmaca. Oyuncular çarktaki harfleri birleştirerek gizli kelimeleri buluyor ve seviyeleri tamamlıyor.\n\nAmaç yalnızca mekaniği yeniden yapmak değil, yeni seviye ve özellikleri kolayca alabilecek ölçeklenebilir bir temel kurmaktı — önce temiz mimari ve yeniden kullanılabilir sistemler.',
+            highlights: [
+                'Akıcı ve duyarlı kaydırmalı harf seçimi',
+                'İlerleyen seviyelerle gizli kelime bulmaca tahtası',
+                'İpucu sistemi ve karıştırma',
+                'Modüler, ölçeklenebilir proje mimarisi',
+            ],
+            role: 'Bireysel geliştirici',
+            team: 'Bireysel',
+            date: 'Playable Studios vaka çalışması · 2026',
+        },
     },
     {
         id: 'web-project-game',
@@ -166,7 +314,18 @@ const PROJECTS = [
         stack: ['Unity', 'C#', 'WebGL', 'Mirror', 'WebSockets'],
         image: '', gallery: [],
         links: { github: 'https://github.com/erenatasun/WebProjectGame' },
-        featured: false,
+        tr: {
+            title: 'Web Çok Oyunculu Oyun',
+            summary: 'Tarayıcıda oynanan, WebSocket üzerinden eşleştirme kuyruğu ve karakter seçimi olan Unity oyunu.',
+            description: 'Tarayıcıda online oyunu keşfeden bir Unity WebGL projesi. Oyuncular eşleştirme kuyruğuna giriyor, sunucu tarafından eşleştiriliyor ve maç başlamadan karakterlerini seçiyor. Ağ katmanı, web build\'inde çalışması için Mirror ve SimpleWeb (WebSocket) transport\'u kullanıyor.',
+            highlights: [
+                'Maç bulundu mesajlarıyla sunucu taraflı eşleştirme kuyruğu',
+                'Karakter seçim akışı ve ana menü arayüzü',
+                'WebGL build\'leri için WebSocket üzerinden Mirror ağ katmanı',
+            ],
+            role: 'Geliştirici',
+            team: 'Bireysel',
+        },
     },
     {
         id: 'bubble-galaxy-defense',
@@ -191,7 +350,18 @@ const PROJECTS = [
             github: 'https://github.com/erenatasun/BubbleGalaxyDefense',
             doc: 'https://docs.google.com/document/d/1JPuRjllGyEGflPVad8bCkjMTMehuycp0mXtrS4YxtAM/edit?usp=sharing',
         },
-        featured: false,
+        tr: {
+            summary: 'Piksel sanatlı uzay savunması: gemini gelen dalgalara karşı baloncuk kalkanla koru.',
+            description: 'Stilize bir galakside geçen 2D piksel sanatlı savunma oyunu. Oyuncu geminin etrafında koşuyor, hurda topluyor ve düşman dalgaları yaklaşırken baloncuk kalkanı ayakta tutuyor. Üç kişilik bir ekiple, eksiksiz bir oyun tasarım dokümanıyla geliştirildi.',
+            highlights: [
+                'Zorluğu giderek artan düşman dalgaları',
+                'Dört yönlü karakter hareketi, atılma ve mermi yönetimi',
+                'Kalkan / üs savunması çekirdek döngüsü, menüler ve oyun sonu akışı',
+                'Yazılı bir Oyun Tasarım Dokümanıyla planlandı ve takip edildi',
+            ],
+            role: 'Proje yöneticisi & geliştirici',
+            team: '3 kişilik ekip',
+        },
     },
     {
         id: 'ecovado-bee-savior',
@@ -213,7 +383,18 @@ const PROJECTS = [
         image: media('ecovado-bee-savior', '2.webp'),
         gallery: gallery('ecovado-bee-savior', ['1.webp', '2.webp', '4.webp', '3.webp', '5.webp', '6.webp']),
         links: { github: 'https://github.com/erenatasun/EcovadoBeeSavior' },
-        featured: true,
+        tr: {
+            summary: '3D üçüncü şahıs çevre macerası — kahraman avokado zehirlenmiş arıları kurtarıyor. 3 Scrum sprintinde geliştirildi.',
+            description: 'Kahraman avokadonun arıları kötü niyetli yetiştiricilerden kurtarma görevine katıl: zehirlenmiş arılar için panzehir bul, bulmacaları çöz ve doğanın dengesini yeniden kur. Oyun ve Uygulama Akademisi bootcamp\'i sırasında beş kişilik bir ekiple yapılan 3D üçüncü şahıs macera / bulmaca oyunu.\n\nProje Scrum ile üç sprintte yürütüldü — Trello\'da backlog, günlük scrum\'lar, sprint review ve retrospektifler repoda belgelendi.',
+            highlights: [
+                'Bulmacalar ve yapay zekâya karşı oynanan bir bulmaca finaliyle üç bölümlük 3D macera',
+                'Diyalog sistemi, NavMesh ile arı ve köstebek NPC davranışları',
+                'Karakter animasyonları: tırmanma, sallanma, taşıma, düşme',
+                'Scrum süreci: 3 sprint, 50 puanlık backlog, Trello panosu',
+            ],
+            role: 'Product Owner & geliştirici',
+            team: '5 kişilik ekip (Echo Team)',
+        },
     },
     {
         id: 'fiasco-circus',
@@ -234,7 +415,17 @@ const PROJECTS = [
         image: media('fiasco-circus', '1.webp'),
         gallery: gallery('fiasco-circus', ['1.webp', '6.webp', '3.gif', '4.gif', '2.webp', '5.webp']),
         links: { github: 'https://github.com/erenatasun/Fiasco_Circus' },
-        featured: false,
+        tr: {
+            summary: '"Make Me Laugh" temasına karanlık ve tuhaf bir yorum — el yapımı piksel sanatlı Global Game Jam oyunu.',
+            description: 'Fiasco Circus, İzmir Ekonomi Üniversitesi\'nin ev sahipliğindeki Global Game Jam\'de geliştirilen karanlık ve tuhaf bir oyun. Jam teması "Make Me Laugh"tı — biz onu daha karanlık bir yöne taşıdık.\n\nProgramlama ve asset entegrasyonunun yanında karakter tasarımlarının ve animasyonlarının çoğunu Aseprite\'ta çizdim ve ekip içindeki proje kararlarına yön verdim.',
+            highlights: [
+                'Karakter tasarım ve animasyonlarının çoğu Aseprite\'ta çizildi',
+                'Asset entegrasyonu ve oynanış programlama',
+                'Jam ekibinde proje yönetimi ve temel tasarım kararları',
+            ],
+            role: 'Geliştirici, karakter sanatçısı & animatör',
+            team: 'Game Jam ekibi',
+        },
     },
     {
         id: 'subway-surfers-clone',
@@ -255,7 +446,18 @@ const PROJECTS = [
         image: media('subway-surfers-clone', '2.webp'),
         gallery: gallery('subway-surfers-clone', ['1.webp', '2.webp', '3.webp', '4.webp']),
         links: { github: 'https://github.com/erenatasun/SubwaySurfersClone' },
-        featured: false,
+        tr: {
+            title: 'Subway Surfers Tarzı Koşu Oyunu',
+            summary: 'Mekanik olarak eksiksiz sonsuz koşu oyunu — Velo Games staj projesi.',
+            description: 'Velo Games Studios stajımda, kıdemli geliştirici Tolga Karanlıkoğlu\'nun mentorluğunda teslim ettiğim Subway Surfers tarzı sonsuz koşu oyunu. Odak, oyun mekaniklerini eksiksiz ve sağlam kurmaktı; arayüz bilinçli olarak sade tutuldu.',
+            highlights: [
+                'Şerit değiştirme, zıplama ve engellerden kaçma',
+                'Prosedürel engel üretimi ve skor döngüsü',
+                'En yüksek skor takibi ve yeniden başlatma akışı',
+            ],
+            role: 'Oyun geliştirici stajyeri',
+            team: 'Mentorlu',
+        },
     },
     {
         id: 'tappy-fish',
@@ -277,7 +479,17 @@ const PROJECTS = [
         imageFit: 'contain',
         gallery: gallery('tappy-fish', ['4.webp', '3.webp', '1.webp', '2.webp']),
         links: { github: 'https://github.com/erenatasun/TappyFish' },
-        featured: false,
+        tr: {
+            summary: 'Dokun-yüz arcade oyunu — ilk tamamladığım Unity oyunlarından biri.',
+            description: 'Temel oyun mekaniklerini baştan sona öğrenmek için yaptığım ilk oyun geliştirme projelerimden biri. Oyuncu bir balığı engellerin arasından geçiriyor; başlaması kolay ama hayatta kaldıkça zorlaşıyor.',
+            highlights: [
+                'Zıplama hissi ayarlanmış dokunma kontrolleri',
+                'Zamanla artan zorluk',
+                'Skor, madalyalar ve en yüksek skor takibi',
+            ],
+            role: 'Bireysel geliştirici',
+            team: 'Bireysel',
+        },
     },
     {
         id: 'earthquake-game',
@@ -293,7 +505,14 @@ const PROJECTS = [
         stack: ['Unity', 'C#', 'Serious Games'],
         image: '', gallery: [],
         links: { github: 'https://github.com/erenatasun/EarthquakeGame' },
-        featured: false,
+        tr: {
+            title: 'Deprem Oyunu',
+            summary: 'Deprem farkındalığı prototipi — bir oyun, yer sallandığında ne yapılacağını öğretebilir mi?',
+            description: 'Deprem farkındalığı senaryoları etrafında kurulan, oyun mekaniklerinin eğitici bir mesajı nasıl taşıyabileceğini araştıran bir Unity prototipi.',
+            highlights: ['Eğitsel amaçlı, senaryo tabanlı oynanış'],
+            role: 'Geliştirici',
+            team: 'Bireysel',
+        },
     },
     {
         id: 'ouagj24',
@@ -313,7 +532,17 @@ const PROJECTS = [
         stack: ['Unity', 'C#', '2D', 'Game Jam'],
         image: '', gallery: [],
         links: { github: 'https://github.com/erenatasun/OUAGJ24' },
-        featured: false,
+        tr: {
+            summary: 'Oyun ve Uygulama Akademisi Game Jam\'i için 2D aksiyon platform oyunu.',
+            description: 'OUA Game Jam 2024 için jam süresi kısıtında geliştirilen 2D platform oyunu — ateş eden düşmanlar, düşme hasarı, can sistemi ve sahneler arası ilerleme.',
+            highlights: [
+                'Karakter kontrolcüsü, düşme hasarı ve can sistemi',
+                'Mermi atan düşmanlar',
+                'Skor takibi ve sahneden sahneye ilerleme',
+            ],
+            role: 'Geliştirici',
+            team: 'Game Jam ekibi',
+        },
     },
     {
         id: 'baytar-pyng',
@@ -333,7 +562,17 @@ const PROJECTS = [
         stack: ['Unity', 'C#', '2D', 'Game Jam'],
         image: '', gallery: [],
         links: { github: 'https://github.com/erenatasun/Baytar_PYNG' },
-        featured: false,
+        tr: {
+            summary: 'Üs savunmasını kuleler ve toplanabilirlerle birleştiren game jam tepeden görünüm nişancı oyunu.',
+            description: 'Küçük bir ekiple ortaklaşa geliştirilen bir game jam oyunu. Oyuncu nişangâhla nişan alıyor, kulelerle birlikte üssü savunuyor ve düşmanlar dalgalar hâlinde doğarken toplanabilirleri topluyor.',
+            highlights: [
+                'Nişangâhla nişan alma ve oyuncu çatışması',
+                'Düşman doğurucu, kuleler ve üs canı',
+                'Toplanabilirler ve bitiş / kazanma koşulları',
+            ],
+            role: 'Oynanış programcısı',
+            team: 'Game Jam ekibi',
+        },
     },
     {
         id: 'fancy-platform',
@@ -349,7 +588,13 @@ const PROJECTS = [
         stack: ['Unity', 'C#', '2D Platformer'],
         image: '', gallery: [],
         links: { github: 'https://github.com/erenatasun/fancy_platform' },
-        featured: false,
+        tr: {
+            summary: 'Hassas hareket ve oyun hissine odaklanan 2D platform oyunu.',
+            description: 'Hassas hareket, seviye tasarımı ve temel platform mekaniklerini pratik etmek için yapılan bir 2D Unity platform prototipi.',
+            highlights: ['Duyarlı oyuncu kontrolcüsü', 'Elle tasarlanmış pratik seviyeleri'],
+            role: 'Bireysel geliştirici',
+            team: 'Bireysel',
+        },
     },
     {
         id: 'aircraft-shooter',
@@ -369,7 +614,17 @@ const PROJECTS = [
         stack: ['Unity', 'C#', 'Object Pooling', 'Shaders'],
         image: '', gallery: [],
         links: { github: 'https://github.com/erenatasun/AircraftShooterGame' },
-        featured: false,
+        tr: {
+            summary: 'Ana gemi, kalkanlar, toplanabilirler ve object pooling içeren Space Invaders tarzı nişancı oyunu.',
+            description: 'Space Invaders ruhunda bir Unity arcade nişancı oyunu. Uzaylı formasyonları ilerlerken tepeden bir ana gemi geçiyor; oyuncu hayatta kalmak için kalkanları, toplanabilirleri ve envanteri kullanıyor.',
+            highlights: [
+                'Uzaylı formasyon kontrolcüsü ve ana gemi',
+                'Mermi ve efektler için object pooling',
+                'Kalkanlar, toplanabilirler, envanter ve gemi istatistikleri',
+            ],
+            role: 'Bireysel geliştirici',
+            team: 'Bireysel',
+        },
     },
     {
         id: '3d-runner',
@@ -385,7 +640,13 @@ const PROJECTS = [
         stack: ['Unity', 'C#', '3D'],
         image: '', gallery: [],
         links: { github: 'https://github.com/erenatasun/3D-Runner' },
-        featured: false,
+        tr: {
+            summary: 'Erken dönem 3D koşu prototipi — şerit hareketi ve takip kamerası.',
+            description: 'Şerit tabanlı hareket, yumuşak takip kamerası ve karakter animasyonunu keşfetmek için yapılan bir 3D Unity koşu prototipi.',
+            highlights: ['Oyuncu kontrolcüsü ve takip kamerası', 'Animasyonlu 3D karakter'],
+            role: 'Bireysel geliştirici',
+            team: 'Bireysel',
+        },
     },
 
     /* ─── Engines & Tools ─────────────────────────────────── */
@@ -410,7 +671,21 @@ const PROJECTS = [
         image: media('custom-2d-engine', '1.webp'),
         gallery: gallery('custom-2d-engine', ['1.webp', '2.webp', '3.webp']),
         links: { github: 'https://github.com/erenatasun/MyGameEngine' },
-        featured: true,
+        featured: 6,
+        tr: {
+            title: 'MakeMyEngine — C++ 2D Oyun Motoru',
+            summary: 'Modern C++ ve OpenGL ile sıfırdan yazılmış hafif bir 2D oyun motoru.',
+            description: 'MakeMyEngine, modern C++ ve OpenGL ile yazılmış hafif bir 2D motor / iskelet. Tilemap\'leri, sprite render\'ı, AABB çarpışmaları, basit bir arayüzü ve girdi yönetimini birleştiriyor; render, sahne, çarpışma ve girdi net, modüler sistemlere ayrılmış durumda.\n\nAmaç: prototipler için "sıfırdan kurulum" yükünü azaltırken motor tasarımını öğrenebilecek kadar okunabilir kalmak. Demo sahnesi tamamen motor üzerinde çalışan bir Pong oyunu.',
+            highlights: [
+                'Ortografik kamera + kontrolcü, 2D renderer ve GLSL shader hattı',
+                'Entity / Component mimarisi (Sprite, Velocity, Paddle bileşenleri…)',
+                'AABB çarpışma sistemi ve klavye girdi katmanı',
+                'CSV tabanlı tilemap\'ler ve asset yöneticisi',
+                'CMake build; yol haritası: batching, partiküller, ses, scripting',
+            ],
+            role: 'Bireysel geliştirici — mimari ve uygulama',
+            team: 'Bireysel',
+        },
     },
     {
         id: 'webgl-letter-transformations',
@@ -431,7 +706,93 @@ const PROJECTS = [
         stack: ['JavaScript', 'WebGL', 'GLSL', 'HTML/CSS'],
         image: '', gallery: [],
         links: { github: 'https://github.com/erenatasun/WebGL_2D_Letter_Transformations' },
-        featured: false,
+        tr: {
+            title: 'WebGL 2D Harf Dönüşümleri',
+            summary: 'Ham üçgenlerden kurulan ve özel shader\'larla canlı dönüştürülen harfler.',
+            description: 'CSE 3219 Bilgisayar Grafikleri dersi (Bahar 2025) için ara sınav projesi. "E" ve "A" harfleri üçgen köşe noktalarından elle modelleniyor ve arayüz kaydırıcılarıyla yönetilen özel vertex ve fragment shader\'larla gerçek zamanlı dönüştürülüyor.',
+            highlights: [
+                'vec2 köşe noktalarından üçgen tabanlı şekil modelleme',
+                'Öteleme / ölçekleme için vertex shader, renk için fragment shader',
+                'Konum, ölçek ve RGB renk için kaydırıcılı arayüz',
+                '"A" her zaman "E"nin ters renginde çiziliyor',
+            ],
+            role: 'Bireysel geliştirici',
+            team: 'Ders projesi',
+        },
+    },
+
+    /* ─── Research ────────────────────────────────────────── */
+    {
+        id: 'tusas-lift-up',
+        title: 'TUSAŞ LIFT UP — Fatigue Strain Analysis (GP-II)',
+        category: 'research',
+        program: 'TUSAŞ LIFT UP',
+        summary: 'Image-based strain measurement for aerospace fatigue tests: optical-flow DIC, live lab capture and strain alarms.',
+        description: 'My second graduation project, carried out in TUSAŞ\'s LIFT UP university–industry programme. Fatigue tests on aerospace composites need to show where and when a specimen starts to deform critically. We built an image-based strain measurement toolkit in Python: every photo of the loaded specimen is compared with a reference frame, a dense displacement field is computed with Farneback optical flow, and its spatial gradient becomes a strain map — a simplified, optical-flow-based take on Digital Image Correlation (DIC).\n\nTwo desktop apps share one analysis core. Fatigue Analyze Studio processes a folder of test images in batch and writes 3-panel figures (reference / displacement / strain) plus a CSV of mean, P99 and max strain. Fatigue Lab Capture runs next to the test rig: it grabs frames from a camera at a fixed interval, analyses each one live, backs up the raw images and raises an alarm when P99 strain crosses a threshold.\n\nOn an open-hole tension CFRP specimen, P99 strain rises steadily from 0.13 to 1.55 over 11 load steps and concentrates around the hole; on a near-uniform translation series it stays below the 0.08 alarm threshold for all 20 frames. The strain value is a relative intensity measure rather than a calibrated physical strain, and specimen edges also light up because the analysis has no region-of-interest mask yet — adding one is the next step.',
+        highlights: [
+            'Dense optical flow (OpenCV Farneback) → displacement field → strain magnitude from εxx, εyy and shear γxy',
+            'Batch analyzer with reference / start / count settings, 3-panel figures and analysis_summary.csv',
+            'Live lab capture: camera or folder-replay source (strategy pattern), timed capture, backup folder, CSV log',
+            'P99-strain alarm that cleanly separates a loaded specimen from rigid translation',
+            'Threaded Tkinter GUIs (worker thread + root.after), CLI mode and a headless self-test',
+        ],
+        role: 'Software developer — analysis core, desktop apps, test pipeline',
+        team: 'Team',
+        date: 'Graduation Project II · 2026',
+        year: 2026,
+        stack: ['Python', 'OpenCV', 'NumPy', 'Matplotlib', 'Tkinter', 'DIC'],
+        image: media('tusas-lift-up', 'cover.webp'),
+        imageFit: 'contain',
+        gallery: gallery('tusas-lift-up', ['1.webp', '2.webp', '3.webp', '4.webp', '5.webp']),
+        links: {},
+        featured: 4,
+        tr: {
+            title: 'TUSAŞ LIFT UP — Yorulma Gerinim Analizi (Bitirme-II)',
+            summary: 'Havacılık yorulma testleri için görüntü tabanlı gerinim ölçümü: optik akış DIC, canlı laboratuvar çekimi ve gerinim alarmı.',
+            description: 'TUSAŞ\'ın LIFT UP üniversite–sanayi programında yürüttüğüm ikinci bitirme projem. Havacılık kompozitlerinin yorulma testlerinde, numunenin nerede ve ne zaman kritik deformasyona başladığını görmek gerekiyor. Bunun için Python\'da görüntü tabanlı bir gerinim ölçüm aracı geliştirdik: yük altındaki numunenin her fotoğrafı bir referans kareyle karşılaştırılıyor, Farneback optik akışıyla yoğun bir yer değiştirme alanı hesaplanıyor ve bu alanın uzaysal gradyanı gerinim haritasına dönüşüyor — Dijital Görüntü Korelasyonu\'nun (DIC) sadeleştirilmiş, optik akış tabanlı bir uygulaması.\n\nİki masaüstü uygulaması aynı analiz çekirdeğini paylaşıyor. Fatigue Analyze Studio, test görüntülerinden oluşan bir klasörü toplu işleyip 3 panelli görseller (referans / yer değiştirme / gerinim) ve ortalama, P99 ve maksimum gerinimi içeren bir CSV üretiyor. Fatigue Lab Capture ise test düzeneğinin yanında çalışıyor: kameradan belirli aralıklarla kare alıyor, her kareyi anında analiz ediyor, ham görüntüleri yedekliyor ve P99 gerinim eşiği aştığında alarm veriyor.\n\nDelikli çekme (OHT) CFRP numunesinde P99 gerinim 11 yük adımında 0,13\'ten 1,55\'e düzenli olarak yükseliyor ve deliğin çevresinde yoğunlaşıyor; neredeyse düzgün bir öteleme serisinde ise 20 karenin tamamında 0,08 alarm eşiğinin altında kalıyor. Gerinim değeri kalibre edilmiş fiziksel gerinim değil, göreli bir yoğunluk ölçüsü; ayrıca analizde henüz ilgi bölgesi (ROI) maskesi olmadığı için numune kenarları da parlıyor — sıradaki adım bu maskeyi eklemek.',
+            highlights: [
+                'Yoğun optik akış (OpenCV Farneback) → yer değiştirme alanı → εxx, εyy ve kayma γxy\'den gerinim şiddeti',
+                'Referans / başlangıç / adet ayarlı toplu analiz aracı, 3 panelli görseller ve analysis_summary.csv',
+                'Canlı laboratuvar çekimi: kamera ya da klasörden oynatma kaynağı (strateji deseni), zamanlı çekim, yedek klasörü, CSV log',
+                'Yüklü numuneyi rijit ötelemeden net biçimde ayıran P99 gerinim alarmı',
+                'Thread\'li Tkinter arayüzleri (worker thread + root.after), komut satırı modu ve arayüzsüz self-test',
+            ],
+            role: 'Yazılım geliştirici — analiz çekirdeği, masaüstü uygulamaları, test hattı',
+            team: 'Ekip',
+            date: 'Bitirme Projesi II · 2026',
+        },
+    },
+    {
+        id: 'numerical-fixed-point',
+        title: 'Numerical Fixed-Point Methods',
+        category: 'research',
+        summary: 'Fixed-point iteration solver with JSON I/O, error tracking and plots.',
+        description: 'A Python implementation of the Fixed Point Iteration method for approximating roots of equations. Parameters are read from JSON, every iteration step and its error is logged, and results are written back to JSON and plotted — all behind a simple desktop UI.',
+        highlights: [
+            'JSON-based input and output',
+            'Per-iteration error tracking and convergence check',
+            'Iteration plot export',
+        ],
+        role: 'Solo developer',
+        team: 'Solo',
+        date: '2024',
+        year: 2024,
+        stack: ['Python', 'Numerical Methods', 'Matplotlib'],
+        image: media('numerical-fixed-point', '1.webp'),
+        gallery: gallery('numerical-fixed-point', ['1.webp', '2.webp', '3.webp', '4.webp']),
+        links: { github: 'https://github.com/erenatasun/NumericalFixedPoint' },
+        tr: {
+            title: 'Sayısal Sabit Nokta Yöntemleri',
+            summary: 'JSON girdi/çıktı, hata takibi ve grafikli sabit nokta iterasyonu çözücüsü.',
+            description: 'Denklem köklerini yaklaşık bulmak için Sabit Nokta İterasyonu yönteminin Python uygulaması. Parametreler JSON\'dan okunuyor, her iterasyon adımı ve hatası kaydediliyor, sonuçlar JSON\'a yazılıp grafiğe dökülüyor — hepsi basit bir masaüstü arayüzünün arkasında.',
+            highlights: [
+                'JSON tabanlı girdi ve çıktı',
+                'İterasyon başına hata takibi ve yakınsama kontrolü',
+                'İterasyon grafiği dışa aktarımı',
+            ],
+            role: 'Bireysel geliştirici',
+            team: 'Bireysel',
+        },
     },
 
     /* ─── AI / ML ─────────────────────────────────────────── */
@@ -440,20 +801,34 @@ const PROJECTS = [
         title: 'TanIA — AI Healthcare Assistant',
         category: 'ai-ml',
         program: 'TEKNOFEST',
-        summary: 'NLP-powered assistant that gives preliminary assessments and physician referrals.',
-        description: 'TEKNOFEST project: I led end-to-end development of an NLP-driven healthcare assistant. From the patient\'s own description of their symptoms it produces a preliminary assessment and recommends which kind of physician to see.',
+        summary: 'Voice-driven Turkish symptom assistant: offline speech recognition + NLP classifier for preliminary assessments.',
+        description: 'TEKNOFEST project: I led the development of TanIA, a voice-driven healthcare assistant for Turkish speakers. The patient says their name, the assistant pulls up their history (age, past conditions), and then listens to their complaint.\n\nSpeech is transcribed offline with the Vosk Turkish model, cleaned with NLTK (tokenisation, Turkish stop-words) and classified by a bag-of-words Multinomial Naive Bayes model trained on 1,000 labelled Turkish symptom sentences across 15 conditions — producing a preliminary assessment that can point the patient to the right kind of physician.',
         highlights: [
-            'Natural-language symptom input',
-            'Preliminary assessment and personalised physician referral',
-            'Led the project end to end',
+            'Offline Turkish speech-to-text with Vosk (no cloud dependency)',
+            'NLTK preprocessing with Turkish stop-words, CountVectorizer features',
+            'Multinomial Naive Bayes trained on 1,000 labelled sentences / 15 conditions',
+            'Patient lookup by spoken name with past-condition history',
         ],
         role: 'Project lead & developer',
-        team: 'Team',
-        date: 'TEKNOFEST',
-        stack: ['Python', 'NLP', 'Machine Learning'],
+        team: 'TEKNOFEST team',
+        date: 'TEKNOFEST · 2024',
+        year: 2024,
+        stack: ['Python', 'NLP', 'Vosk', 'NLTK', 'scikit-learn'],
         image: '', gallery: [],
-        links: {},
-        featured: true,
+        links: { github: 'https://github.com/GoncaArabaci/tania-diagnosis-assistant' },
+        tr: {
+            title: 'TanIA — Yapay Zekâ Sağlık Asistanı',
+            summary: 'Sesle çalışan Türkçe semptom asistanı: çevrimdışı konuşma tanıma + NLP sınıflandırıcıyla ön değerlendirme.',
+            description: 'TEKNOFEST projesi: Türkçe konuşanlar için sesle çalışan bir sağlık asistanı olan TanIA\'nın geliştirilmesini yönettim. Hasta adını söylüyor, asistan geçmişini (yaş, önceki tanılar) getiriyor ve ardından şikâyetini dinliyor.\n\nKonuşma Vosk Türkçe modeliyle çevrimdışı metne çevriliyor, NLTK ile temizleniyor (tokenizasyon, Türkçe stop-word\'ler) ve 15 rahatsızlıkta etiketlenmiş 1.000 Türkçe semptom cümlesiyle eğitilmiş bir bag-of-words Multinomial Naive Bayes modeliyle sınıflandırılıyor — hastayı doğru uzmana yönlendirebilecek bir ön değerlendirme üretiliyor.',
+            highlights: [
+                'Vosk ile çevrimdışı Türkçe konuşmadan metne (bulut bağımlılığı yok)',
+                'Türkçe stop-word\'lerle NLTK ön işleme, CountVectorizer öznitelikleri',
+                '1.000 etiketli cümle / 15 rahatsızlıkla eğitilen Multinomial Naive Bayes',
+                'Sesle söylenen isimden hasta kaydı ve geçmiş tanılar',
+            ],
+            role: 'Proje lideri & geliştirici',
+            team: 'TEKNOFEST ekibi',
+        },
     },
     {
         id: 'air-defense',
@@ -473,7 +848,18 @@ const PROJECTS = [
         stack: ['AI', 'Computer Vision', 'Sensor Fusion', 'Laser'],
         image: '', gallery: [],
         links: {},
-        featured: false,
+        tr: {
+            title: 'Yapay Zekâ Kontrollü Hava Savunma Sistemi',
+            summary: 'Yapay zekâ ile hedef tanıma ve çoklu sensör füzyonuna sahip lazer tabanlı otonom savunma.',
+            description: 'TEKNOFEST projesi: yapay zekâ tabanlı hedef tanımayı çoklu sensör füzyonuyla birleştirerek 10 metrelik angajman yarıçapındaki hava tehditlerini tespit edip etkisiz hâle getiren otonom, lazer tabanlı bir savunma sistemi.',
+            highlights: [
+                'Yapay zekâ tabanlı hedef tanıma',
+                'Tespit için çoklu sensör füzyonu',
+                '10 m angajman yarıçapı',
+            ],
+            role: 'Sistem tasarımı & yapay zekâ',
+            team: 'Ekip',
+        },
     },
     {
         id: 'nlp-project',
@@ -489,7 +875,14 @@ const PROJECTS = [
         stack: ['Java', 'NLP'],
         image: '', gallery: [],
         links: { github: 'https://github.com/erenatasun/NLPProject' },
-        featured: false,
+        tr: {
+            title: 'NLP Projesi — Yapay Dil',
+            summary: 'Java\'da NLP teknikleriyle tasarlanmış yapay bir dil.',
+            description: 'NLP odaklı kurallarla yeni bir dilin tasarımını araştıran bir Java projesi — tokenizasyon, dil bilgisi ve anlam temelden kuruldu.',
+            highlights: ['Tokenizer ve dil bilgisi kuralları', 'Temelden tanımlanan anlam katmanı'],
+            role: 'Bireysel geliştirici',
+            team: 'Bireysel',
+        },
     },
 
     /* ─── IoT / Hardware ──────────────────────────────────── */
@@ -512,7 +905,19 @@ const PROJECTS = [
         stack: ['IoT', 'Python', 'Sensors', 'Embedded', 'Research'],
         image: '', gallery: [],
         links: {},
-        featured: true,
+        tr: {
+            title: 'Akıllı Güneş Paneli',
+            summary: 'Hava durumu verisiyle yönünü gerçek zamanlı ayarlayan, destekli IoT güneş paneli.',
+            description: 'TÜBİTAK 2209-A Üniversite Öğrencileri Araştırma Projeleri programı kapsamında desteklenen bir araştırma projesi. IoT tabanlı panel gerçek zamanlı meteorolojik verileri alıyor ve enerji verimini en üst düzeye çıkarmak için uyarlanabilir konumlandırma algoritmalarıyla yönünü ayarlıyor.',
+            highlights: [
+                'Gerçek zamanlı meteorolojik veri alımı',
+                'Panel yönü için uyarlanabilir konumlandırma algoritması',
+                'Sensör + gömülü kontrol entegrasyonu',
+                'TÜBİTAK 2209-A desteği',
+            ],
+            role: 'Araştırmacı & geliştirici',
+            team: 'Ekip',
+        },
     },
 
     /* ─── Mobile ──────────────────────────────────────────── */
@@ -537,7 +942,19 @@ const PROJECTS = [
         imageFit: 'contain',
         gallery: gallery('community-event-app', ['3.webp', '1.webp', '4.webp', '2.webp']),
         links: { github: 'https://github.com/erenatasun/uniclub' },
-        featured: false,
+        tr: {
+            title: 'UniClub — Topluluk Etkinlikleri Uygulaması',
+            summary: 'Öğrencilerin üniversite kulübü etkinliklerini kaçırmamasını sağlayan Flutter uygulaması.',
+            description: 'Üniversite öğrenci topluluklarının etkinliklerini öne çıkaran ve düzenleyen bir Flutter uygulaması; öğrenciler katılma ve tanışma fırsatlarını kaçırmıyor.',
+            highlights: [
+                'Ana sayfanın üstünde öne çıkan etkinlikler',
+                'Etkileşimli takvim görünümü',
+                'Misyon, geçmiş ve yaklaşan etkinliklerle topluluk sayfaları',
+                'Kaydedilen / favori etkinlikler için hatırlatmalar',
+            ],
+            role: 'Bireysel geliştirici',
+            team: 'Bireysel',
+        },
     },
     {
         id: 'firplus-calorie',
@@ -558,7 +975,19 @@ const PROJECTS = [
         stack: ['Flutter', 'Dart', 'Hive', 'Provider'],
         image: '', gallery: [],
         links: { github: 'https://github.com/erenatasun/FirPlus' },
-        featured: false,
+        tr: {
+            title: 'FirPlus — Kalori Takibi',
+            summary: 'Seriler, grafikler ve yapay zekâya hazır fotoğraflı öğün kaydına sahip Flutter kalori takip uygulaması.',
+            description: 'Günlük kalori alımını takip etmek için bir Flutter uygulaması. Öğünler Hive ile cihazda saklanıyor; kullanıcıyı motive tutmak için panelde ilerleme halkaları, grafikler ve seriler gösteriliyor. Fotoğraftan yemek tanıma için bir yapay zekâ servis katmanı hazır.',
+            highlights: [
+                'Yerel Hive veritabanıyla öğün kaydı',
+                'Kalori ilerleme halkası, fl_chart grafikleri ve takvim geçmişi',
+                'Alev widget\'lı seri sistemi',
+                'Fotoğraf tabanlı yemek analizi için yapay zekâ servis katmanı',
+            ],
+            role: 'Bireysel geliştirici',
+            team: 'Bireysel',
+        },
     },
     {
         id: 'pet-adopting-app',
@@ -579,51 +1008,58 @@ const PROJECTS = [
         stack: ['Flutter', 'Dart', 'Provider'],
         image: '', gallery: [],
         links: { github: 'https://github.com/erenatasun/OnlinePetAdoptingApp' },
-        featured: false,
+        tr: {
+            title: 'Online Evcil Hayvan Sahiplenme Uygulaması',
+            summary: 'Sahiplenenleri, barınakları ve yöneticileri buluşturan Flutter uygulaması — YMÜ grup projesi.',
+            description: 'Yazılım Mühendisliği grup projesi olarak geliştirilen bir Flutter uygulaması. Sahiplenmek isteyenler hayvanlara göz atıp başvuruyor; barınaklar hayvanları listeleyip başvuruları değerlendiriyor; yöneticiler platformu denetliyor. Mimaride ve özelliklerin teslimatında birlikte çalıştım.',
+            highlights: [
+                'Üç rol: sahiplenen, barınak, yönetici — her birinin kendi paneli',
+                'Sahiplenme başvurusu ve değerlendirme akışı',
+                'Bildirimler, profiller, karşılama ekranları',
+                'Provider tabanlı durum yönetimi ve servis katmanı',
+            ],
+            role: 'Geliştirici',
+            team: 'YMÜ grup projesi',
+        },
     },
 
-    /* ─── Research ────────────────────────────────────────── */
+    /* ─── Web ─────────────────────────────────────────────── */
     {
-        id: 'tusas-lift-up',
-        title: 'TUSAŞ Lift Up (GP-II)',
-        category: 'research',
-        program: 'Graduation Project',
-        summary: 'Digital Image Correlation software that detects cracks in fatigue-test data.',
-        description: 'Graduation project (GP-II) within the TUSAŞ Lift Up programme: Digital Image Correlation (DIC) based software that analyses multiple crack-detection indicators across fatigue-test datasets and validates detection accuracy against empirical material-failure data.',
+        id: 'pbh-studio',
+        title: 'PBH Studio — Studio Website',
+        category: 'web',
+        studio: 'PBH Studio',
+        summary: 'Bilingual website of my indie game studio — Astro static site with games, press kit and CI deploys.',
+        description: 'PBH Studio (Primordial Black Hole Studio) is the independent game studio I co-founded with Gonca Arabacı. We make co-op and multiplayer games that get people talking — and shouting: Pawed Drive and Mask Heist are our current projects.\n\nI built the studio website with Astro as a static, bilingual site (English at /, Turkish at /tr). Games are content-collection Markdown files validated by a schema, so adding a game means adding one file; the press kit, team and socials come from a single data file. Every push to main builds and deploys the site to GitHub Pages through a GitHub Actions workflow.',
         highlights: [
-            'DIC-based analysis of fatigue-test image data',
-            'Multiple crack-detection indicators compared',
-            'Validated against empirical failure data',
+            'Astro static site, English + Turkish routes with fallback to English when a translation is missing',
+            'Typed content collections (zod schema) for games: status, genres, platforms, trailer, Steam app id, stores',
+            'Game pages, studio page, press kit with logo downloads, contact page, 404',
+            'Animated black-hole hero, responsive layout',
+            'GitHub Actions → GitHub Pages deploy on every push; base-path aware links for custom-domain migration',
         ],
-        role: 'Developer & researcher',
-        team: 'Team',
-        date: 'Graduation Project II',
+        role: 'Co-founder — design & development of the website',
+        team: 'PBH Studio (2 co-founders)',
+        date: '2026',
         year: 2026,
-        stack: ['Python', 'DIC', 'Image Processing', 'Fatigue Analysis'],
-        image: '', gallery: [],
-        links: {},
-        featured: false,
-    },
-    {
-        id: 'numerical-fixed-point',
-        title: 'Numerical Fixed-Point Methods',
-        category: 'research',
-        summary: 'Fixed-point iteration solver with JSON I/O, error tracking and plots.',
-        description: 'A Python implementation of the Fixed Point Iteration method for approximating roots of equations. Parameters are read from JSON, every iteration step and its error is logged, and results are written back to JSON and plotted — all behind a simple desktop UI.',
-        highlights: [
-            'JSON-based input and output',
-            'Per-iteration error tracking and convergence check',
-            'Iteration plot export',
-        ],
-        role: 'Solo developer',
-        team: 'Solo',
-        date: '2024',
-        year: 2024,
-        stack: ['Python', 'Numerical Methods', 'Matplotlib'],
-        image: media('numerical-fixed-point', '1.webp'),
-        gallery: gallery('numerical-fixed-point', ['1.webp', '2.webp', '3.webp', '4.webp']),
-        links: { github: 'https://github.com/erenatasun/NumericalFixedPoint' },
-        featured: false,
+        stack: ['Astro', 'TypeScript', 'HTML/CSS', 'i18n', 'GitHub Actions'],
+        image: media('pbh-studio', 'cover.webp'),
+        gallery: gallery('pbh-studio', ['cover.webp', '1.webp', '2.webp', '3.webp', '4.webp']),
+        links: { demo: PBH_SITE, github: 'https://github.com/erenatasun/pbh-studio-website' },
+        tr: {
+            title: 'PBH Studio — Stüdyo Web Sitesi',
+            summary: 'Bağımsız oyun stüdyomun iki dilli web sitesi — oyunlar, basın kiti ve otomatik yayınla Astro statik site.',
+            description: 'PBH Studio (Primordial Black Hole Studio), Gonca Arabacı ile birlikte kurduğum bağımsız oyun stüdyosu. İnsanları konuşturan — ve bağırtan — co-op ve çok oyunculu oyunlar yapıyoruz: Pawed Drive ve Mask Heist şu anki projelerimiz.\n\nStüdyonun sitesini Astro ile statik ve iki dilli (İngilizce /, Türkçe /tr) olarak geliştirdim. Oyunlar şema ile doğrulanan Markdown içerik koleksiyonları; yeni oyun eklemek tek bir dosya eklemek demek. Basın kiti, ekip ve sosyal medya tek bir veri dosyasından geliyor. main dalına yapılan her push, GitHub Actions ile siteyi derleyip GitHub Pages\'e yayınlıyor.',
+            highlights: [
+                'Astro statik site; çeviri yoksa İngilizceye düşen İngilizce + Türkçe rotalar',
+                'Oyunlar için tipli içerik koleksiyonları (zod şeması): durum, türler, platformlar, fragman, Steam app id, mağazalar',
+                'Oyun sayfaları, stüdyo sayfası, logo indirmeli basın kiti, iletişim sayfası, 404',
+                'Animasyonlu kara delik hero alanı, duyarlı tasarım',
+                'Her push\'ta GitHub Actions → GitHub Pages yayını; özel domaine geçiş için base-path uyumlu linkler',
+            ],
+            role: 'Kurucu ortak — web sitesinin tasarımı ve geliştirmesi',
+            team: 'PBH Studio (2 kurucu ortak)',
+        },
     },
 
     /* ─── Academic ────────────────────────────────────────── */
@@ -641,7 +1077,14 @@ const PROJECTS = [
         stack: ['HTML', 'PHP', 'SQL'],
         image: '', gallery: [],
         links: { github: 'https://github.com/erenatasun/DataBaseManagementSystem-Web-Interface' },
-        featured: false,
+        tr: {
+            title: 'VTYS Web Arayüzü',
+            summary: 'Bir mağaza veritabanı için web yönetim paneli: müşteriler, siparişler, ödemeler, ürünler ve daha fazlası.',
+            description: 'Bir veritabanı yönetim sistemini yönetmek için web tabanlı arayüz: kategoriler, müşteriler, teslimatlar, siparişler, ödemeler, ürünler ve satın alımlar. Uçtan uca veritabanı odaklı web uygulamalarını pratik etmek için ders projesi olarak geliştirildi.',
+            highlights: ['Birbiriyle ilişkili 7 varlık için CRUD ekranları', 'SQL destekli PHP sayfaları'],
+            role: 'Geliştirici',
+            team: 'Ders projesi',
+        },
     },
     {
         id: 'library-management-system',
@@ -657,7 +1100,14 @@ const PROJECTS = [
         stack: ['C#', 'OOP', 'Design Patterns'],
         image: '', gallery: [],
         links: { github: 'https://github.com/erenatasun/LibraryManagementSystem' },
-        featured: false,
+        tr: {
+            title: 'Kütüphane Yönetim Sistemi (C#)',
+            summary: 'Temiz OOP ve tasarım kalıplarını uygulayan C# kütüphane sistemi.',
+            description: 'Velo Games Studios stajım sırasında nesne yönelimli tasarım kalıplarını ve temiz mimariyi pratik etmek için tasarladığım C# kütüphane yönetim sistemi.',
+            highlights: ['OOP tasarım kalıpları', 'Temiz, katmanlı mimari'],
+            role: 'Bireysel geliştirici',
+            team: 'Bireysel',
+        },
     },
     {
         id: 'shopping-application',
@@ -673,7 +1123,14 @@ const PROJECTS = [
         stack: ['Java', 'OOP'],
         image: '', gallery: [],
         links: { github: 'https://github.com/erenatasun/ShoppingApplication' },
-        featured: false,
+        tr: {
+            title: 'Alışveriş Uygulaması (Java)',
+            summary: 'Java OOP alışveriş uygulaması — ders pratiği.',
+            description: 'Nesne yönelimli programlama ve temel veri modelleme pratiği için ders kapsamında geliştirilen bir Java alışveriş uygulaması.',
+            highlights: ['Nesne yönelimli veri modeli'],
+            role: 'Bireysel geliştirici',
+            team: 'Bireysel',
+        },
     },
 
     /* ─── Leadership ──────────────────────────────────────── */
@@ -695,7 +1152,18 @@ const PROJECTS = [
         stack: ['Project Management', 'Erasmus+', 'Cross-cultural'],
         image: '', gallery: [],
         links: {},
-        featured: false,
+        tr: {
+            title: 'Gençlerle Dijital Yeşillenme',
+            summary: '4 ülkeyi kapsayan uluslararası gençlik hareketliliği projesi — 24.320 € bütçe.',
+            description: 'Erasmus+ KA152-YOU projesi: 4 ülkeyi kapsayan, 24.320 € bütçeli uluslararası bir gençlik hareketliliği programını koordine ettim; dijital dönüşüm atölyeleri ve kültürlerarası iş birliğiyle çevre farkındalığını artırdık.',
+            highlights: [
+                '4 ortak ülke',
+                '24.320 € bütçe',
+                'Çevre farkındalığı üzerine dijital dönüşüm atölyeleri',
+            ],
+            role: 'Proje koordinatörü',
+            team: 'Uluslararası',
+        },
     },
 ];
 

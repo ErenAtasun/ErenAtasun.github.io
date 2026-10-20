@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Eren Atasun — Game Developer & Computer Engineer. Portfolio of Unity games, simulations, AI/ML projects, engines and mobile apps." />
+    <meta name="description" content="Eren Atasun — Game Developer & Computer Engineer, co-founder of PBH Studio. Portfolio of Unity games, simulations, AI/ML projects, engines and mobile apps." />
     <meta property="og:title" content="Eren Atasun — Game Developer & Computer Engineer" />
-    <meta property="og:description" content="Games, simulations, AI tools and engines — built across studio internships and graduation projects." />
+    <meta property="og:description" content="Co-founder of PBH Studio. Games, simulations, AI tools and engines — built across studio internships, game jams and graduation projects." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://erenatasun.github.io/Assets/ErenAtasun.jpg" />
     <meta name="theme-color" content="#0a0a0f" />
@@ -17,28 +17,34 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link rel="stylesheet" href="css/main.css?v=4" />
-    <link rel="stylesheet" href="css/home.css?v=4" />
-    <link rel="stylesheet" href="css/projects.css?v=4" />
+    <link rel="stylesheet" href="css/main.css?v=5" />
+    <link rel="stylesheet" href="css/home.css?v=5" />
+    <link rel="stylesheet" href="css/projects.css?v=5" />
 </head>
-<body>
-    <a class="skip-link" href="#main">Skip to content</a>
+<body data-page="home">
+    <a class="skip-link" href="#main" data-i18n="a11y.skip">Skip to content</a>
     <header class="site-header">
         <div class="container nav">
             <a href="index.html" class="nav-brand">Eren<span>.</span>Atasun</a>
             <nav aria-label="Main">
                 <ul class="nav-links" id="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="index.html#about">About</a></li>
-                    <li><a href="index.html#skills">Skills</a></li>
-                    <li><a href="index.html#experience">Experience</a></li>
-                    <li><a href="projects.html">Projects</a></li>
-                    <li><a href="index.html#contact">Contact</a></li>
+                    <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+                    <li><a href="index.html#about" data-i18n="nav.about">About</a></li>
+                    <li><a href="index.html#skills" data-i18n="nav.skills">Skills</a></li>
+                    <li><a href="index.html#experience" data-i18n="nav.experience">Experience</a></li>
+                    <li><a href="projects.html" data-i18n="nav.projects">Projects</a></li>
+                    <li><a href="index.html#contact" data-i18n="nav.contact">Contact</a></li>
                 </ul>
             </nav>
-            <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
-                <i class="fa-solid fa-bars"></i>
-            </button>
+            <div class="nav-actions">
+                <div class="lang-switch" role="group" aria-label="Language" data-i18n-attr="aria-label:a11y.lang">
+                    <button type="button" data-lang="en" aria-pressed="true">EN</button>
+                    <button type="button" data-lang="tr" aria-pressed="false">TR</button>
+                </div>
+                <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
         </div>
     </header>
 
@@ -47,19 +53,19 @@
         <section class="hero">
             <div class="container hero-inner">
                 <div>
-                    <span class="hero-eyebrow">// Available for opportunities</span>
-                    <h1>Hi, I'm Eren — <span class="accent">Game Developer</span> &amp; Computer Engineer</h1>
-                    <p class="hero-subtitle">
-                        I build games, simulations, AI tools and engines. Currently interning at
-                        Bluesense (Boston) and HIFIVE (İstanbul) — bringing ideas from rough
-                        sketch to playable prototype.
+                    <span class="hero-eyebrow" data-i18n="hero.eyebrow">// Available for opportunities</span>
+                    <h1 data-i18n-html="hero.title">Hi, I'm Eren — <span class="accent">Game Developer</span> &amp; Computer Engineer</h1>
+                    <p class="hero-subtitle" data-i18n="hero.subtitle">
+                        I build games, simulations, AI tools and engines. Co-founder of the indie game studio
+                        PBH Studio and currently interning at Bluesense (Boston) and HIFIVE (İstanbul) — bringing
+                        ideas from rough sketch to playable prototype.
                     </p>
                     <div class="hero-cta">
                         <a href="projects.html" class="btn btn-primary">
-                            View Projects <i class="fa-solid fa-arrow-right"></i>
+                            <span data-i18n="hero.ctaProjects">View Projects</span> <i class="fa-solid fa-arrow-right"></i>
                         </a>
                         <a href="Assets/CV-ErenAtasun.pdf" class="btn btn-secondary" download>
-                            <i class="fa-solid fa-download"></i> Download CV
+                            <i class="fa-solid fa-download"></i> <span data-i18n="hero.ctaCv">Download CV</span>
                         </a>
                         <div class="hero-social">
                             <a href="https://github.com/erenatasun" target="_blank" rel="noopener" aria-label="GitHub"><i class="fab fa-github"></i></a>
@@ -68,14 +74,32 @@
                         </div>
                     </div>
                     <dl class="hero-stats">
-                        <div><dt>Projects</dt><dd data-project-count>30</dd></div>
-                        <div><dt>Internships</dt><dd>6</dd></div>
-                        <div><dt>Events organized</dt><dd>20+</dd></div>
-                        <div><dt>Game jams hosted</dt><dd>3</dd></div>
+                        <div><dt data-i18n="hero.stat.projects">Projects</dt><dd data-project-count>34</dd></div>
+                        <div><dt data-i18n="hero.stat.internships">Internships</dt><dd>6</dd></div>
+                        <div><dt data-i18n="hero.stat.events">Events organized</dt><dd>20+</dd></div>
+                        <div><dt data-i18n="hero.stat.jams">Game jams hosted</dt><dd>3</dd></div>
                     </dl>
                 </div>
                 <div class="hero-portrait">
-                    <img src="Assets/ErenAtasun.jpg" alt="Portrait of Eren Atasun" width="280" height="280" />
+                    <img src="Assets/ErenAtasun.jpg" alt="Portrait of Eren Atasun" data-i18n-attr="alt:a11y.portrait" width="280" height="280" />
+                </div>
+            </div>
+        </section>
+
+        <!-- Studio spotlight -->
+        <section class="studio-band" aria-labelledby="studio-title">
+            <div class="container">
+                <div class="studio-card reveal">
+                    <img class="studio-card__mark" src="Assets/projects/pbh-studio/mark.webp" alt="" width="72" height="72" />
+                    <div class="studio-card__text">
+                        <span class="studio-card__kicker" data-i18n="studio.kicker">// My studio</span>
+                        <h2 id="studio-title" data-i18n="studio.title">Co-founder of PBH Studio</h2>
+                        <p data-i18n="studio.desc">Primordial Black Hole Studio is the independent game studio I co-founded with Gonca Arabacı. We make co-op and multiplayer games that get people talking — and shouting. Now in development: Pawed Drive and Mask Heist.</p>
+                    </div>
+                    <div class="studio-card__actions">
+                        <a class="btn btn-primary" href="projects.html#pawed-drive"><i class="fa-solid fa-car-side"></i> Pawed Drive</a>
+                        <a class="btn btn-secondary" href="https://erenatasun.github.io/pbh-studio-website/" target="_blank" rel="noopener"><span data-i18n="studio.site">Studio website</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -83,16 +107,16 @@
         <!-- About -->
         <section class="section" id="about">
             <div class="container container-narrow">
-                <div class="section-title"><h2>About Me</h2></div>
+                <div class="section-title"><h2 data-i18n="about.title">About Me</h2></div>
                 <div class="about-grid">
-                    <p>
+                    <p data-i18n="about.p1">
                         As a Computer Engineering student passionate about games and simulation,
                         I build interactive systems in Unity, C++ and beyond. I have shipped
                         prototypes across multiple game studios, contributed to AI products
                         during my internships, and led student communities — including founding
                         my university's first dedicated game-development club.
                     </p>
-                    <p>
+                    <p data-i18n="about.p2">
                         Outside the studio I have coordinated international Erasmus+ projects
                         and supported several non-profit organizations — experiences that taught
                         me how to translate ambiguous needs into shipped solutions, and how to
@@ -106,17 +130,17 @@
         <!-- Education -->
         <section class="section" id="education">
             <div class="container container-narrow">
-                <div class="section-title"><h2>Education</h2></div>
+                <div class="section-title"><h2 data-i18n="edu.title">Education</h2></div>
                 <ul class="timeline">
                     <li class="timeline-item reveal">
                         <h3>Manisa Celal Bayar University</h3>
-                        <div class="meta">Sep 2023 – 2026 · Manisa, Turkey</div>
-                        <p>Bachelor's Degree in Computer Engineering.</p>
+                        <div class="meta" data-i18n="edu.mcbu.meta">Sep 2023 – 2026 · Manisa, Turkey</div>
+                        <p data-i18n="edu.mcbu.desc">Bachelor's Degree in Computer Engineering.</p>
                     </li>
                     <li class="timeline-item reveal">
                         <h3>Alanya Alaaddin Keykubat University</h3>
-                        <div class="meta">Sep 2021 – 2023 · Alanya, Turkey</div>
-                        <p>Bachelor's Degree in Computer Engineering — transfer.</p>
+                        <div class="meta" data-i18n="edu.alku.meta">Sep 2021 – 2023 · Alanya, Turkey</div>
+                        <p data-i18n="edu.alku.desc">Bachelor's Degree in Computer Engineering — transfer.</p>
                     </li>
                 </ul>
             </div>
@@ -125,51 +149,59 @@
         <!-- Skills -->
         <section class="section" id="skills">
             <div class="container">
-                <div class="section-title"><h2>Skills</h2></div>
+                <div class="section-title"><h2 data-i18n="skills.title">Skills</h2></div>
                 <div class="skills-grid">
                     <div class="skill-card reveal">
-                        <h3><i class="fa-solid fa-code"></i> Languages</h3>
-                        <p>The toolbox I reach for on most projects.</p>
+                        <h3><i class="fa-solid fa-code"></i> <span data-i18n="skills.lang.title">Languages</span></h3>
+                        <p data-i18n="skills.lang.desc">The toolbox I reach for on most projects.</p>
                         <div class="badge-row">
                             <span class="badge">C++</span>
                             <span class="badge">C#</span>
                             <span class="badge">Python</span>
                             <span class="badge">Java</span>
                             <span class="badge">Dart</span>
+                            <span class="badge">TypeScript</span>
                         </div>
                     </div>
                     <div class="skill-card reveal">
-                        <h3><i class="fa-solid fa-toolbox"></i> Technologies</h3>
-                        <p>Engines, frameworks and platforms I work with day to day.</p>
+                        <h3><i class="fa-solid fa-toolbox"></i> <span data-i18n="skills.tech.title">Technologies</span></h3>
+                        <p data-i18n="skills.tech.desc">Engines, frameworks and platforms I work with day to day.</p>
                         <div class="badge-row">
                             <span class="badge badge--cyan">Unity</span>
                             <span class="badge badge--cyan">Unreal Engine</span>
+                            <span class="badge badge--cyan">Netcode / Mirror</span>
                             <span class="badge badge--cyan">ML-Agents</span>
+                            <span class="badge badge--cyan">OpenCV</span>
                             <span class="badge badge--cyan">Flutter</span>
                             <span class="badge badge--cyan">Firebase</span>
+                            <span class="badge badge--cyan">Astro</span>
+                            <span class="badge badge--cyan">Blender</span>
                             <span class="badge badge--cyan">Git/GitHub</span>
                         </div>
                     </div>
                     <div class="skill-card reveal">
-                        <h3><i class="fa-solid fa-layer-group"></i> Domains</h3>
-                        <p>Areas where I've shipped real work.</p>
+                        <h3><i class="fa-solid fa-layer-group"></i> <span data-i18n="skills.domains.title">Domains</span></h3>
+                        <p data-i18n="skills.domains.desc">Areas where I've shipped real work.</p>
                         <div class="badge-row">
-                            <span class="badge">Game Dev</span>
+                            <span class="badge" data-i18n="skills.d.gamedev">Game Dev</span>
+                            <span class="badge" data-i18n="skills.d.multiplayer">Multiplayer</span>
                             <span class="badge">AI / ML</span>
-                            <span class="badge">Simulation</span>
+                            <span class="badge" data-i18n="skills.d.sim">Simulation</span>
+                            <span class="badge" data-i18n="skills.d.vision">Computer Vision</span>
                             <span class="badge">NLP</span>
                             <span class="badge">IoT</span>
-                            <span class="badge">Mobile</span>
+                            <span class="badge" data-i18n="skills.d.mobile">Mobile</span>
                         </div>
                     </div>
                     <div class="skill-card reveal">
-                        <h3><i class="fa-solid fa-people-group"></i> Soft Skills</h3>
-                        <p>How I work with teams and turn ambiguity into shipped work.</p>
+                        <h3><i class="fa-solid fa-people-group"></i> <span data-i18n="skills.soft.title">Soft Skills</span></h3>
+                        <p data-i18n="skills.soft.desc">How I work with teams and turn ambiguity into shipped work.</p>
                         <div class="badge-row">
-                            <span class="badge badge--neutral">Leadership</span>
-                            <span class="badge badge--neutral">Fast prototyping</span>
-                            <span class="badge badge--neutral">Adaptability</span>
-                            <span class="badge badge--neutral">Project management</span>
+                            <span class="badge badge--neutral" data-i18n="skills.s.lead">Leadership</span>
+                            <span class="badge badge--neutral" data-i18n="skills.s.proto">Fast prototyping</span>
+                            <span class="badge badge--neutral" data-i18n="skills.s.adapt">Adaptability</span>
+                            <span class="badge badge--neutral" data-i18n="skills.s.pm">Project management</span>
+                            <span class="badge badge--neutral" data-i18n="skills.s.design">Game design (GDD)</span>
                         </div>
                     </div>
                 </div>
@@ -180,10 +212,10 @@
         <section class="section" id="featured">
             <div class="container">
                 <div class="section-head">
-                    <div class="section-title"><h2>Featured Projects</h2></div>
-                    <a class="btn btn-secondary" href="projects.html">All <span data-project-count>30</span> projects <i class="fa-solid fa-arrow-right"></i></a>
+                    <div class="section-title"><h2 data-i18n="featured.title">Featured Projects</h2></div>
+                    <a class="btn btn-secondary" href="projects.html"><span data-i18n-count="featured.all">All 34 projects</span> <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
-                <p class="section-lead">A few highlights — click any card for screenshots, my role and the tech behind it.</p>
+                <p class="section-lead" data-i18n="featured.lead">A few highlights — click any card for screenshots, my role and the tech behind it.</p>
                 <div class="projects-grid" id="featured-projects">
                     <!-- Populated by js/projects-render.js -->
                 </div>
@@ -193,42 +225,47 @@
         <!-- Experience -->
         <section class="section" id="experience">
             <div class="container container-narrow">
-                <div class="section-title"><h2>Experience</h2></div>
+                <div class="section-title"><h2 data-i18n="exp.title">Experience</h2></div>
                 <ul class="timeline">
-                    <li class="timeline-item reveal">
-                        <h3>Bluesense — Computer Engineering Intern</h3>
-                        <div class="meta">Jan 2026 – Present · Boston, USA</div>
-                        <p>Contributing to both UI and AI teams: building responsive interfaces and integrating intelligent system components into production workflows. Working remotely in a cross-functional agile environment.</p>
+                    <li class="timeline-item timeline-item--studio reveal">
+                        <h3 data-i18n="exp.pbh.role">PBH Studio — Co-founder</h3>
+                        <div class="meta" data-i18n="exp.pbh.meta">2026 – Present · Türkiye</div>
+                        <p data-i18n="exp.pbh.desc">Co-founded Primordial Black Hole Studio, an independent studio making co-op and multiplayer games. Leading development of Pawed Drive (online co-op driving comedy) and Mask Heist, and built the studio's bilingual website.</p>
                     </li>
                     <li class="timeline-item reveal">
-                        <h3>HIFIVE — Game Developer Intern</h3>
-                        <div class="meta">Jan 2026 – Present · İstanbul, Turkey</div>
-                        <p>Shipping core gameplay mechanics, system architecture and performance tuning across two game projects in parallel. Collaborating with marketing on positioning and player engagement strategy.</p>
+                        <h3 data-i18n="exp.bluesense.role">Bluesense — Computer Engineering Intern</h3>
+                        <div class="meta" data-i18n="exp.bluesense.meta">Jan 2026 – Present · Boston, USA</div>
+                        <p data-i18n="exp.bluesense.desc">Contributing to both UI and AI teams: building responsive interfaces and integrating intelligent system components into production workflows. Working remotely in a cross-functional agile environment.</p>
                     </li>
                     <li class="timeline-item reveal">
-                        <h3>XRLAB — Game Developer Intern</h3>
-                        <div class="meta">Apr 2025 – Sep 2025 · Manisa, Turkey</div>
-                        <p>Engineered C++-based real-time simulation systems focused on performance optimization, low-latency execution, and hardware–software integration. Built modular components that improved runtime stability and reduced latency in simulation pipelines.</p>
+                        <h3 data-i18n="exp.hifive.role">HIFIVE — Game Developer Intern</h3>
+                        <div class="meta" data-i18n="exp.hifive.meta">Jan 2026 – Present · İstanbul, Turkey</div>
+                        <p data-i18n="exp.hifive.desc">Shipping core gameplay mechanics, system architecture and performance tuning across two game projects in parallel. Collaborating with marketing on positioning and player engagement strategy.</p>
                     </li>
                     <li class="timeline-item reveal">
-                        <h3>ENM Digital — Computer Engineering Intern</h3>
-                        <div class="meta">Apr 2024 – Sep 2024 · Manisa, Turkey</div>
-                        <p>Implemented core NLP and automation features for the AI application <em>Proje Sihirbazı</em>. Contributed to full-stack team projects across web and mobile.</p>
+                        <h3 data-i18n="exp.xrlab.role">XRLAB — Game Developer Intern</h3>
+                        <div class="meta" data-i18n="exp.xrlab.meta">Apr 2025 – Sep 2025 · Manisa, Turkey</div>
+                        <p data-i18n="exp.xrlab.desc">Engineered C++-based real-time simulation systems focused on performance optimization, low-latency execution, and hardware–software integration. Built modular components that improved runtime stability and reduced latency in simulation pipelines.</p>
                     </li>
                     <li class="timeline-item reveal">
-                        <h3>Oyun ve Uygulama Akademisi — Trainee</h3>
-                        <div class="meta">Jan 2024 – Sep 2024</div>
-                        <p>Structured Unity mentorship — gameplay programming, plus startup management and product commercialization for game studios. Expanded my professional network across the game-dev and entrepreneurship ecosystem.</p>
+                        <h3 data-i18n="exp.enm.role">ENM Digital — Computer Engineering Intern</h3>
+                        <div class="meta" data-i18n="exp.enm.meta">Apr 2024 – Sep 2024 · Manisa, Turkey</div>
+                        <p data-i18n-html="exp.enm.desc">Implemented core NLP and automation features for the AI application <em>Proje Sihirbazı</em>. Contributed to full-stack team projects across web and mobile.</p>
                     </li>
                     <li class="timeline-item reveal">
-                        <h3>Velo Games Studios — Game Developer Intern</h3>
-                        <div class="meta">Jan 2024 – Jul 2024</div>
-                        <p>Delivered multiple game prototypes (Subway Surfers-style, Candy Crush-style) under the mentorship of senior developer Tolga Karanlıkoğlu. Designed and built a C# book-library management system applying OOP design patterns.</p>
+                        <h3 data-i18n="exp.oua.role">Oyun ve Uygulama Akademisi — Trainee</h3>
+                        <div class="meta" data-i18n="exp.oua.meta">Jan 2024 – Sep 2024</div>
+                        <p data-i18n="exp.oua.desc">Structured Unity mentorship — gameplay programming, plus startup management and product commercialization for game studios. Expanded my professional network across the game-dev and entrepreneurship ecosystem.</p>
                     </li>
                     <li class="timeline-item reveal">
-                        <h3>Codeo — Game Developer Intern</h3>
-                        <div class="meta">Aug 2023 – Sep 2023 · İzmir, Turkey</div>
-                        <p>Implemented tile-based grid and lock systems in Unity, enforcing SOLID principles across the codebase to keep game logic maintainable.</p>
+                        <h3 data-i18n="exp.velo.role">Velo Games Studios — Game Developer Intern</h3>
+                        <div class="meta" data-i18n="exp.velo.meta">Jan 2024 – Jul 2024</div>
+                        <p data-i18n="exp.velo.desc">Delivered multiple game prototypes (Subway Surfers-style, Candy Crush-style) under the mentorship of senior developer Tolga Karanlıkoğlu. Designed and built a C# book-library management system applying OOP design patterns.</p>
+                    </li>
+                    <li class="timeline-item reveal">
+                        <h3 data-i18n="exp.codeo.role">Codeo — Game Developer Intern</h3>
+                        <div class="meta" data-i18n="exp.codeo.meta">Aug 2023 – Sep 2023 · İzmir, Turkey</div>
+                        <p data-i18n="exp.codeo.desc">Implemented tile-based grid and lock systems in Unity, enforcing SOLID principles across the codebase to keep game logic maintainable.</p>
                     </li>
                 </ul>
             </div>
@@ -237,32 +274,32 @@
         <!-- Community & Leadership -->
         <section class="section" id="community">
             <div class="container container-narrow">
-                <div class="section-title"><h2>Community &amp; Leadership</h2></div>
+                <div class="section-title"><h2 data-i18n-html="comm.title">Community &amp; Leadership</h2></div>
                 <ul class="timeline">
                     <li class="timeline-item reveal">
-                        <h3>Oyun Tasarımı ve Geliştiricileri Topluluğu — Lead</h3>
-                        <div class="meta">Sep 2024 – Present</div>
-                        <p>Leading a student game-development community: organized 20+ technical events and 3 game jams. Managing 3 GSB (ÜNİDES) funded projects with 250,000 TL+ budget across cross-functional student teams.</p>
+                        <h3 data-i18n="comm.otgt.role">Oyun Tasarımı ve Geliştiricileri Topluluğu — Lead</h3>
+                        <div class="meta" data-i18n="comm.otgt.meta">Sep 2024 – Present</div>
+                        <p data-i18n="comm.otgt.desc">Leading a student game-development community: organized 20+ technical events and 3 game jams. Managing 3 GSB (ÜNİDES) funded projects with 250,000 TL+ budget across cross-functional student teams.</p>
                     </li>
                     <li class="timeline-item reveal">
-                        <h3>100sClub — Campus Leader</h3>
-                        <div class="meta">Jul 2024 – Sep 2025</div>
-                        <p>Represented 100sClub on campus, attending leadership and entrepreneurship trainings while expanding a national student professional network.</p>
+                        <h3 data-i18n="comm.100s.role">100sClub — Campus Leader</h3>
+                        <div class="meta" data-i18n="comm.100s.meta">Jul 2024 – Sep 2025</div>
+                        <p data-i18n="comm.100s.desc">Represented 100sClub on campus, attending leadership and entrepreneurship trainings while expanding a national student professional network.</p>
                     </li>
                     <li class="timeline-item reveal">
-                        <h3>Talentia Union — Community Manager</h3>
-                        <div class="meta">May 2024 – Sep 2025</div>
-                        <p>Structured community operations and led event planning, improving organizational efficiency and member engagement.</p>
+                        <h3 data-i18n="comm.talentia.role">Talentia Union — Community Manager</h3>
+                        <div class="meta" data-i18n="comm.talentia.meta">May 2024 – Sep 2025</div>
+                        <p data-i18n="comm.talentia.desc">Structured community operations and led event planning, improving organizational efficiency and member engagement.</p>
                     </li>
                     <li class="timeline-item reveal">
-                        <h3>Dijital Oyun Geliştirme Ekibi CBU — Founder Lead</h3>
-                        <div class="meta">Nov 2023 – Sep 2024</div>
-                        <p>Founded my university's first dedicated game-development community — established team structure, organized events, and cultivated a collaborative culture among student developers.</p>
+                        <h3 data-i18n="comm.dogt.role">Dijital Oyun Geliştirme Ekibi CBU — Founder Lead</h3>
+                        <div class="meta" data-i18n="comm.dogt.meta">Nov 2023 – Sep 2024</div>
+                        <p data-i18n="comm.dogt.desc">Founded my university's first dedicated game-development community — established team structure, organized events, and cultivated a collaborative culture among student developers.</p>
                     </li>
                     <li class="timeline-item reveal">
-                        <h3>Game Factory — Campus Ambassador</h3>
-                        <div class="meta">Aug 2023 – Sep 2024</div>
-                        <p>Built and managed a Game Factory ambassador community, organizing industry-aligned events and serving as the primary liaison between the company and student developers.</p>
+                        <h3 data-i18n="comm.gf.role">Game Factory — Campus Ambassador</h3>
+                        <div class="meta" data-i18n="comm.gf.meta">Aug 2023 – Sep 2024</div>
+                        <p data-i18n="comm.gf.desc">Built and managed a Game Factory ambassador community, organizing industry-aligned events and serving as the primary liaison between the company and student developers.</p>
                     </li>
                 </ul>
             </div>
@@ -271,12 +308,12 @@
         <!-- Contact -->
         <section class="section" id="contact">
             <div class="container container-narrow">
-                <div class="section-title"><h2>Contact</h2></div>
-                <p>Open to internships, full-time roles and game-jam teams. The fastest way to reach me is email or LinkedIn.</p>
+                <div class="section-title"><h2 data-i18n="contact.title">Contact</h2></div>
+                <p data-i18n="contact.lead">Open to internships, full-time roles and game-jam teams. The fastest way to reach me is email or LinkedIn.</p>
                 <div class="contact-grid">
                     <a class="contact-item reveal" href="mailto:atasun35@gmail.com">
                         <i class="fa-solid fa-envelope"></i>
-                        <span class="label">Email</span>
+                        <span class="label" data-i18n="contact.email">Email</span>
                         <span class="value">atasun35@gmail.com</span>
                     </a>
                     <a class="contact-item reveal" href="https://www.linkedin.com/in/erenatasun" target="_blank" rel="noopener">
@@ -291,13 +328,13 @@
                     </a>
                     <a class="contact-item reveal" href="tel:+905309495084">
                         <i class="fa-solid fa-phone"></i>
-                        <span class="label">Phone</span>
+                        <span class="label" data-i18n="contact.phone">Phone</span>
                         <span class="value">+90 530 949 50 84</span>
                     </a>
                     <div class="contact-item reveal">
                         <i class="fa-solid fa-location-dot"></i>
-                        <span class="label">Location</span>
-                        <span class="value">İzmir, Turkey</span>
+                        <span class="label" data-i18n="contact.location">Location</span>
+                        <span class="value" data-i18n="contact.locationValue">İzmir, Turkey</span>
                     </div>
                 </div>
             </div>
@@ -315,8 +352,9 @@
         </div>
     </footer>
 
-    <script src="js/projects-data.js?v=4"></script>
-    <script src="js/projects-render.js?v=4"></script>
-    <script src="js/main.js?v=4"></script>
+    <script src="js/i18n.js?v=5"></script>
+    <script src="js/projects-data.js?v=5"></script>
+    <script src="js/projects-render.js?v=5"></script>
+    <script src="js/main.js?v=5"></script>
 </body>
 </html>

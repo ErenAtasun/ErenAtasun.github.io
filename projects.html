@@ -6,9 +6,9 @@
     <meta name="description" content="Projects by Eren Atasun — Unity games, simulations, AI tools, engines and mobile apps, with screenshots and details." />
     <meta name="theme-color" content="#0a0a0f" />
     <meta property="og:title" content="Projects — Eren Atasun" />
-    <meta property="og:description" content="Unity games, simulations, AI tools, a C++ engine and mobile apps — with screenshots and details." />
+    <meta property="og:description" content="PBH Studio games, Unity projects, simulations, AI tools, a C++ engine and mobile apps — with screenshots and details." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://erenatasun.github.io/Assets/projects/this-is-blast/2.webp" />
+    <meta property="og:image" content="https://erenatasun.github.io/Assets/projects/pawed-drive/cover.webp" />
     <title>Projects — Eren Atasun</title>
 
     <script>document.documentElement.classList.add('js');</script>
@@ -17,41 +17,47 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-    <link rel="stylesheet" href="css/main.css?v=4" />
-    <link rel="stylesheet" href="css/projects.css?v=4" />
+    <link rel="stylesheet" href="css/main.css?v=5" />
+    <link rel="stylesheet" href="css/projects.css?v=5" />
 </head>
-<body>
-    <a class="skip-link" href="#main">Skip to content</a>
+<body data-page="projects">
+    <a class="skip-link" href="#main" data-i18n="a11y.skip">Skip to content</a>
     <header class="site-header">
         <div class="container nav">
             <a href="index.html" class="nav-brand">Eren<span>.</span>Atasun</a>
             <nav aria-label="Main">
                 <ul class="nav-links" id="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="index.html#about">About</a></li>
-                    <li><a href="index.html#skills">Skills</a></li>
-                    <li><a href="index.html#experience">Experience</a></li>
-                    <li><a href="projects.html">Projects</a></li>
-                    <li><a href="index.html#contact">Contact</a></li>
+                    <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+                    <li><a href="index.html#about" data-i18n="nav.about">About</a></li>
+                    <li><a href="index.html#skills" data-i18n="nav.skills">Skills</a></li>
+                    <li><a href="index.html#experience" data-i18n="nav.experience">Experience</a></li>
+                    <li><a href="projects.html" data-i18n="nav.projects">Projects</a></li>
+                    <li><a href="index.html#contact" data-i18n="nav.contact">Contact</a></li>
                 </ul>
             </nav>
-            <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
-                <i class="fa-solid fa-bars"></i>
-            </button>
+            <div class="nav-actions">
+                <div class="lang-switch" role="group" aria-label="Language" data-i18n-attr="aria-label:a11y.lang">
+                    <button type="button" data-lang="en" aria-pressed="true">EN</button>
+                    <button type="button" data-lang="tr" aria-pressed="false">TR</button>
+                </div>
+                <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
         </div>
     </header>
 
     <main id="main">
         <section class="page-header">
             <div class="container">
-                <span class="eyebrow">// Portfolio</span>
-                <h1>Projects</h1>
-                <p>
+                <span class="eyebrow" data-i18n="projects.eyebrow">// Portfolio</span>
+                <h1 data-i18n="projects.title">Projects</h1>
+                <p data-i18n="projects.lead">
                     Games, simulations, AI tools, a C++ engine and mobile apps — from studio case
                     studies and game jams to funded research. Open any project for screenshots,
                     my role, key highlights and source code.
                 </p>
-                <div class="stats-row" id="projects-stats" aria-label="Portfolio at a glance">
+                <div class="stats-row" id="projects-stats" aria-label="Portfolio at a glance" data-i18n-attr="aria-label:projects.statsLabel">
                     <!-- populated by JS -->
                 </div>
             </div>
@@ -63,20 +69,20 @@
                     <div class="toolbar__row">
                         <label class="search-field">
                             <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-                            <span class="sr-only">Search projects</span>
-                            <input type="search" id="project-search" placeholder="Search by name, tech or keyword (e.g. Unity, Flutter, AI)" autocomplete="off" />
+                            <span class="sr-only" data-i18n="projects.searchLabel">Search projects</span>
+                            <input type="search" id="project-search" placeholder="Search by name, tech or keyword (e.g. Unity, Flutter, AI)" data-i18n-attr="placeholder:projects.search" autocomplete="off" />
                         </label>
                         <label class="sort-field">
-                            <span class="sr-only">Sort projects</span>
+                            <span class="sr-only" data-i18n="projects.sortLabel">Sort projects</span>
                             <i class="fa-solid fa-arrow-down-wide-short" aria-hidden="true"></i>
                             <select id="project-sort">
-                                <option value="featured">Highlights first</option>
-                                <option value="newest">Newest first</option>
-                                <option value="az">A – Z</option>
+                                <option value="featured" data-i18n="projects.sort.featured">Highlights first</option>
+                                <option value="newest" data-i18n="projects.sort.newest">Newest first</option>
+                                <option value="az" data-i18n="projects.sort.az">A – Z</option>
                             </select>
                         </label>
                     </div>
-                    <div class="filter-bar" id="projects-filters" role="group" aria-label="Filter by category">
+                    <div class="filter-bar" id="projects-filters" role="group" aria-label="Filter by category" data-i18n-attr="aria-label:projects.filterLabel">
                         <!-- filter chips populated by JS -->
                     </div>
                 </div>
@@ -89,8 +95,8 @@
 
                 <div class="empty-state" id="projects-empty" hidden>
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <p>No projects match your search.</p>
-                    <button type="button" class="btn btn-secondary" data-reset-filters>Clear filters</button>
+                    <p data-i18n="projects.empty">No projects match your search.</p>
+                    <button type="button" class="btn btn-secondary" data-reset-filters data-i18n="projects.clear">Clear filters</button>
                 </div>
             </div>
         </section>
@@ -107,8 +113,9 @@
         </div>
     </footer>
 
-    <script src="js/projects-data.js?v=4"></script>
-    <script src="js/projects-render.js?v=4"></script>
-    <script src="js/main.js?v=4"></script>
+    <script src="js/i18n.js?v=5"></script>
+    <script src="js/projects-data.js?v=5"></script>
+    <script src="js/projects-render.js?v=5"></script>
+    <script src="js/main.js?v=5"></script>
 </body>
 </html>

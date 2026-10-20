@@ -12,11 +12,14 @@
         if (!toggle || !links) return;
         links.classList.toggle('is-open', open);
         toggle.setAttribute('aria-expanded', String(open));
-        toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        const t = window.I18N ? window.I18N.t : (k) => (k === 'a11y.menuClose' ? 'Close menu' : 'Open menu');
+        toggle.setAttribute('aria-label', t(open ? 'a11y.menuClose' : 'a11y.menuOpen'));
         const icon = toggle.querySelector('i');
         if (icon) icon.className = open ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
     }
     if (toggle && links) {
+        setMenu(false); // sets the localized aria-label
+        if (window.I18N) window.I18N.onChange(() => setMenu(links.classList.contains('is-open')));
         toggle.addEventListener('click', () => setMenu(!links.classList.contains('is-open')));
         links.addEventListener('click', (e) => {
             if (e.target.closest('a')) setMenu(false);

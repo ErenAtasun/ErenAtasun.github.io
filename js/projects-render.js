@@ -1,5 +1,6 @@
 /* Renders the project gallery (search, filters, sort) on projects.html,
-   featured cards on index.html, and the project detail modal + image lightbox. */
+   featured cards on index.html, and the project detail modal + image lightbox.
+   All text goes through I18N (js/i18n.js); a language switch re-renders in place. */
 
 (function () {
     'use strict';
@@ -8,6 +9,12 @@
     const { CATEGORIES, PROJECTS } = data;
     const byId = new Map(PROJECTS.map((p) => [p.id, p]));
     const MAX_CARD_BADGES = 4;
+
+    // i18n helpers — work even if i18n.js failed to load
+    const I18N = window.I18N || { lang: 'en', t: (k) => k, pick: (o, f) => o && o[f], onChange() {} };
+    const t = (key, vars) => I18N.t(key, vars);
+    const pick = (p, field) => I18N.pick(p, field);
+    const catLabel = (cat) => (cat ? (I18N.lang === 'tr' && cat.tr) || cat.label : '');
 
     function escapeHtml(str) {
         return String(str ?? '').replace(/[&<>"']/g, (c) => ({
@@ -33,6 +40,13 @@
         return cat && typeof cat.hue === 'number' ? cat.hue : 265;
     }
 
+    function badgesFor(p) {
+        const out = [];
+        if (p.studio) out.push(`<span class="card-studio"><i class="fa-solid fa-circle-half-stroke"></i> ${escapeHtml(p.studio)}</span>`);
+        if (p.program) out.push(`<span class="card-program"><i class="fa-solid fa-award"></i> ${escapeHtml(p.program)}</span>`);
+        return out.length ? `<div class="card-badges">${out.join('')}</div>` : '';
+    }
+
     // Generated cover used when a project has no screenshot (or the image fails to load).
     function generatedCover(p) {
         const cat = CATEGORIES[p.category];
@@ -40,17 +54,17 @@
         return `
             <div class="cover-gen" style="--h:${categoryHue(p)}" aria-hidden="true">
                 <i class="fa-solid ${escapeHtml(icon)}"></i>
-                <span class="cover-gen__title">${escapeHtml(p.title)}</span>
+                <span class="cover-gen__title">${escapeHtml(pick(p, 'title'))}</span>
             </div>`;
     }
 
-    function coverImage(src, p, extraClass) {
+    function coverImage(src, p) {
         const fit = p.imageFit === 'contain' ? ' is-contain' : '';
         const backdrop = fit ? `<img class="cover-backdrop" src="${escapeHtml(src)}" alt="" aria-hidden="true" />` : '';
         return `
-            <div class="cover${fit} ${extraClass || ''}" style="--h:${categoryHue(p)}">
+            <div class="cover${fit}" style="--h:${categoryHue(p)}">
                 ${backdrop}
-                <img class="cover-img" src="${escapeHtml(src)}" alt="${escapeHtml(p.title)} screenshot" loading="lazy" data-cover-fallback="${escapeHtml(p.id)}" />
+                <img class="cover-img" src="${escapeHtml(src)}" alt="${escapeHtml(pick(p, 'title'))}" loading="lazy" data-cover-fallback="${escapeHtml(p.id)}" />
             </div>`;
     }
 
@@ -78,26 +92,29 @@
     function renderProjectCard(p) {
         const cat = CATEGORIES[p.category];
         const imgCount = projectImages(p).length;
-        const meta = [p.date, p.team].filter(Boolean).map(escapeHtml).join(' · ');
+        const meta = [pick(p, 'date'), pick(p, 'team')].filter(Boolean).map(escapeHtml).join(' · ');
+        const status = pick(p, 'status');
+        const title = pick(p, 'title');
 
         return `
             <article class="card project-card" data-category="${escapeHtml(p.category)}" data-project-id="${escapeHtml(p.id)}">
                 <div class="card-media">
                     ${renderMedia(p)}
-                    ${cat ? `<span class="category-tag"><i class="fa-solid ${escapeHtml(cat.icon)}"></i> ${escapeHtml(cat.label)}</span>` : ''}
-                    ${imgCount > 1 ? `<span class="media-count" title="${imgCount} screenshots"><i class="fa-regular fa-images"></i> ${imgCount}</span>` : ''}
+                    ${cat ? `<span class="category-tag"><i class="fa-solid ${escapeHtml(cat.icon)}"></i> ${escapeHtml(catLabel(cat))}</span>` : ''}
+                    ${imgCount > 1 ? `<span class="media-count" title="${escapeHtml(t('card.shots', { n: imgCount }))}"><i class="fa-regular fa-images"></i> ${imgCount}</span>` : ''}
+                    ${status ? `<span class="status-tag"><span class="status-dot"></span>${escapeHtml(status)}</span>` : ''}
                 </div>
                 <div class="card-body">
-                    ${p.program ? `<span class="card-program"><i class="fa-solid fa-award"></i> ${escapeHtml(p.program)}</span>` : ''}
-                    <h3>${escapeHtml(p.title)}</h3>
+                    ${badgesFor(p)}
+                    <h3>${escapeHtml(title)}</h3>
                     ${meta ? `<div class="card-meta">${meta}</div>` : ''}
-                    <p>${escapeHtml(p.summary)}</p>
+                    <p>${escapeHtml(pick(p, 'summary'))}</p>
                     <div class="badge-row">${renderBadges(p.stack, MAX_CARD_BADGES)}</div>
                     <div class="card-footer">
                         <button type="button" class="card-details" data-open-project="${escapeHtml(p.id)}">
-                            View details <i class="fa-solid fa-arrow-right"></i>
+                            ${escapeHtml(t('card.details'))} <i class="fa-solid fa-arrow-right"></i>
                         </button>
-                        ${p.links?.github ? `<a class="card-code" href="${escapeHtml(p.links.github)}" target="_blank" rel="noopener" aria-label="${escapeHtml(p.title)} source code on GitHub"><i class="fab fa-github"></i> Code</a>` : ''}
+                        ${p.links?.github ? `<a class="card-code" href="${escapeHtml(p.links.github)}" target="_blank" rel="noopener" aria-label="${escapeHtml(t('card.codeLabel', { title }))}"><i class="fab fa-github"></i> ${escapeHtml(t('card.code'))}</a>` : ''}
                     </div>
                 </div>
             </article>
@@ -113,44 +130,65 @@
         const games = PROJECTS.filter((p) => p.category === 'games').length;
         const withVisuals = PROJECTS.filter((p) => projectImages(p).length).length;
         const stats = [
-            [PROJECTS.length, 'Projects'],
-            [games, 'Games'],
-            [withProgram, 'Funded / competition / thesis'],
-            [withVisuals, 'With screenshots'],
+            [PROJECTS.length, t('stats.projects')],
+            [games, t('stats.games')],
+            [withProgram, t('stats.programs')],
+            [withVisuals, t('stats.visuals')],
         ];
         container.innerHTML = stats.map(([n, label]) =>
             `<div class="stat"><span class="stat__value">${n}</span><span class="stat__label">${escapeHtml(label)}</span></div>`).join('');
     }
 
-    function initGallery(gallery) {
-        gallery.innerHTML = PROJECTS.map(renderProjectCard).join('');
+    // Gallery state survives language switches
+    const state = { filter: 'all', query: '', sort: 'featured' };
+    let galleryApply = null;
 
+    function initGallery(gallery) {
         const filters = document.getElementById('projects-filters');
         const search = document.getElementById('project-search');
         const sort = document.getElementById('project-sort');
         const countEl = document.getElementById('projects-count');
         const emptyEl = document.getElementById('projects-empty');
-        const state = { filter: 'all', query: '', sort: 'featured' };
-
-        const cards = Array.from(gallery.querySelectorAll('.project-card'));
-        const searchIndex = new Map(PROJECTS.map((p) => [p.id, [
-            p.title, p.summary, p.description, p.program, p.date, p.role, p.team,
-            (CATEGORIES[p.category] || {}).label, ...(p.stack || []), ...(p.highlights || []),
-        ].filter(Boolean).join(' ').toLocaleLowerCase('tr')]));
         const order = new Map(PROJECTS.map((p, i) => [p.id, i]));
+        let cards = [];
+        let searchIndex = new Map();
 
-        if (filters) {
+        // Search matches both languages, so "oyun" and "game" both work
+        function buildSearchIndex() {
+            searchIndex = new Map(PROJECTS.map((p) => {
+                const tr = p.tr || {};
+                const cat = CATEGORIES[p.category] || {};
+                return [p.id, [
+                    p.title, p.summary, p.description, p.program, p.studio, p.date, p.role, p.team, p.status,
+                    tr.title, tr.summary, tr.description, tr.role, tr.team, tr.date, tr.status,
+                    cat.label, cat.tr, ...(p.stack || []), ...(p.highlights || []), ...(tr.highlights || []),
+                ].filter(Boolean).join(' ').toLocaleLowerCase('tr')];
+            }));
+        }
+
+        function renderCards() {
+            gallery.innerHTML = PROJECTS.map(renderProjectCard).join('');
+            cards = Array.from(gallery.querySelectorAll('.project-card'));
+        }
+
+        function renderFilters() {
+            if (!filters) return;
             const counts = PROJECTS.reduce((acc, p) => {
                 acc[p.category] = (acc[p.category] || 0) + 1;
                 return acc;
             }, {});
-            const chips = [`<button type="button" class="filter-chip is-active" data-filter="all" aria-pressed="true">All <span class="count">${PROJECTS.length}</span></button>`];
+            const chip = (key, label, n, icon) => {
+                const on = state.filter === key;
+                return `<button type="button" class="filter-chip${on ? ' is-active' : ''}" data-filter="${key}" aria-pressed="${on}">${icon ? `<i class="fa-solid ${escapeHtml(icon)}"></i> ` : ''}${escapeHtml(label)} <span class="count">${n}</span></button>`;
+            };
+            const chips = [chip('all', t('projects.all'), PROJECTS.length)];
             Object.entries(CATEGORIES).forEach(([key, cat]) => {
-                const n = counts[key] || 0;
-                if (!n) return;
-                chips.push(`<button type="button" class="filter-chip" data-filter="${key}" aria-pressed="false"><i class="fa-solid ${escapeHtml(cat.icon)}"></i> ${escapeHtml(cat.label)} <span class="count">${n}</span></button>`);
+                if (counts[key]) chips.push(chip(key, catLabel(cat), counts[key], cat.icon));
             });
             filters.innerHTML = chips.join('');
+        }
+
+        if (filters) {
             filters.addEventListener('click', (e) => {
                 const btn = e.target.closest('.filter-chip');
                 if (!btn) return;
@@ -163,7 +201,6 @@
                 apply();
             });
         }
-
         if (search) {
             search.addEventListener('input', () => {
                 state.query = search.value.trim().toLocaleLowerCase('tr');
@@ -181,8 +218,9 @@
                 if (!e.target.closest('[data-reset-filters]')) return;
                 if (search) search.value = '';
                 state.query = '';
-                const all = filters && filters.querySelector('[data-filter="all"]');
-                if (all) all.click(); else apply();
+                state.filter = 'all';
+                renderFilters();
+                apply();
             });
         }
 
@@ -192,10 +230,12 @@
             if (state.sort === 'newest') {
                 return (pb.year || 0) - (pa.year || 0) || order.get(pa.id) - order.get(pb.id);
             }
-            if (state.sort === 'az') return pa.title.localeCompare(pb.title, 'en');
-            // "featured": featured first, then projects with screenshots, then data order
-            const score = (p) => (p.featured ? 2 : 0) + (projectImages(p).length ? 1 : 0);
-            return score(pb) - score(pa) || order.get(pa.id) - order.get(pb.id);
+            if (state.sort === 'az') {
+                return pick(pa, 'title').localeCompare(pick(pb, 'title'), I18N.lang);
+            }
+            // "featured": home-page order first, then projects with screenshots, then data order
+            const rank = (p) => (p.featured ? 100 - p.featured : 0) + (projectImages(p).length ? 1 : 0);
+            return rank(pb) - rank(pa) || order.get(pa.id) - order.get(pb.id);
         }
 
         function apply() {
@@ -205,27 +245,31 @@
                 const id = card.dataset.projectId;
                 const catOk = state.filter === 'all' || card.dataset.category === state.filter;
                 const text = searchIndex.get(id);
-                const queryOk = terms.every((t) => text.includes(t));
-                const show = catOk && queryOk;
+                const show = catOk && terms.every((term) => text.includes(term));
                 card.hidden = !show;
                 if (show) visible++;
                 gallery.appendChild(card);
             });
             if (countEl) {
                 countEl.textContent = visible === PROJECTS.length
-                    ? `Showing all ${visible} projects`
-                    : `Showing ${visible} of ${PROJECTS.length} projects`;
+                    ? t('projects.countAll', { n: visible })
+                    : t('projects.countSome', { n: visible, total: PROJECTS.length });
             }
             if (emptyEl) emptyEl.hidden = visible !== 0;
         }
 
-        apply();
+        galleryApply = () => { renderCards(); renderFilters(); apply(); };
+        buildSearchIndex();
+        galleryApply();
+    }
+
+    function featuredProjects() {
+        return PROJECTS.filter((p) => p.featured).sort((a, b) => a.featured - b.featured).slice(0, 6);
     }
 
     function renderFeatured(container) {
-        const featured = PROJECTS.filter((p) => p.featured).slice(0, 6);
-        container.innerHTML = featured.map(renderProjectCard).join('')
-            || `<div class="empty-state">Featured projects coming soon.</div>`;
+        container.innerHTML = featuredProjects().map(renderProjectCard).join('')
+            || `<div class="empty-state">${escapeHtml(t('card.featuredSoon'))}</div>`;
     }
 
     /* ============================================
@@ -264,7 +308,7 @@
         if (embed) {
             return `
                 <div class="modal-video">
-                    <iframe src="${escapeHtml(embed)}" title="Project video" loading="lazy"
+                    <iframe src="${escapeHtml(embed)}" title="${escapeHtml(t('modal.videoTitle'))}" loading="lazy"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen></iframe>
                 </div>`;
@@ -272,7 +316,7 @@
         if (/\.(mp4|webm|ogg)(\?|$)/i.test(src)) {
             return `<div class="modal-video"><video controls preload="metadata" src="${escapeHtml(src)}"></video></div>`;
         }
-        return `<a class="btn btn-secondary" href="${escapeHtml(src)}" target="_blank" rel="noopener"><i class="fa-solid fa-video"></i> Watch video</a>`;
+        return `<a class="btn btn-secondary" href="${escapeHtml(src)}" target="_blank" rel="noopener"><i class="fa-solid fa-video"></i> ${escapeHtml(t('modal.watch'))}</a>`;
     }
 
     function renderViewer(p, images) {
@@ -280,19 +324,20 @@
             return `<div class="viewer viewer--empty">${generatedCover(p)}</div>`;
         }
         const fit = p.imageFit === 'contain' ? ' is-contain' : '';
+        const title = pick(p, 'title');
         const thumbs = images.length > 1 ? `
-            <div class="viewer-thumbs" role="tablist" aria-label="Screenshots">
+            <div class="viewer-thumbs" role="tablist" aria-label="${escapeHtml(t('modal.screenshots'))}">
                 ${images.map((src, i) => `
                     <button type="button" class="viewer-thumb${i === 0 ? ' is-active' : ''}" data-viewer-index="${i}"
-                            role="tab" aria-selected="${i === 0}" aria-label="Screenshot ${i + 1}" data-hide-wrap>
+                            role="tab" aria-selected="${i === 0}" aria-label="${escapeHtml(t('modal.screenshot', { n: i + 1 }))}" data-hide-wrap>
                         <img src="${escapeHtml(src)}" alt="" loading="lazy" data-hide-on-error />
                     </button>`).join('')}
             </div>` : '';
         return `
             <div class="viewer" data-images='${escapeHtml(JSON.stringify(images))}'>
-                <button type="button" class="viewer-stage${fit}" data-open-lightbox aria-label="Open screenshot full screen">
+                <button type="button" class="viewer-stage${fit}" data-open-lightbox aria-label="${escapeHtml(t('modal.openFull'))}">
                     <img class="viewer-stage__backdrop" src="${escapeHtml(images[0])}" alt="" aria-hidden="true" />
-                    <img class="viewer-stage__img" src="${escapeHtml(images[0])}" alt="${escapeHtml(p.title)} screenshot 1" />
+                    <img class="viewer-stage__img" src="${escapeHtml(images[0])}" alt="${escapeHtml(title)} — ${escapeHtml(t('modal.screenshot', { n: 1 }))}" />
                     <span class="viewer-zoom"><i class="fa-solid fa-expand"></i></span>
                     ${images.length > 1 ? `<span class="viewer-counter"><span data-viewer-current>1</span> / ${images.length}</span>` : ''}
                 </button>
@@ -303,10 +348,15 @@
     function linkButtons(p) {
         const l = p.links || {};
         const out = [];
-        if (l.github) out.push(`<a class="btn btn-primary btn-block" href="${escapeHtml(l.github)}" target="_blank" rel="noopener"><i class="fab fa-github"></i> View source</a>`);
-        if (l.demo)   out.push(`<a class="btn btn-secondary btn-block" href="${escapeHtml(l.demo)}" target="_blank" rel="noopener"><i class="fa-solid fa-play"></i> Play demo</a>`);
-        if (l.video)  out.push(`<a class="btn btn-secondary btn-block" href="${escapeHtml(l.video)}" target="_blank" rel="noopener"><i class="fa-solid fa-video"></i> Gameplay video</a>`);
-        if (l.doc)    out.push(`<a class="btn btn-secondary btn-block" href="${escapeHtml(l.doc)}" target="_blank" rel="noopener"><i class="fa-solid fa-file-lines"></i> Design document</a>`);
+        const btn = (href, icon, key, primary) =>
+            `<a class="btn ${primary ? 'btn-primary' : 'btn-secondary'} btn-block" href="${escapeHtml(href)}" target="_blank" rel="noopener"><i class="${icon}"></i> ${escapeHtml(t(key))}</a>`;
+        let primaryUsed = false;
+        const next = () => { const was = primaryUsed; primaryUsed = true; return !was; };
+        if (l.page)   out.push(btn(l.page, 'fa-solid fa-circle-half-stroke', 'modal.page', next()));
+        if (l.demo)   out.push(btn(l.demo, p.category === 'web' ? 'fa-solid fa-arrow-up-right-from-square' : 'fa-solid fa-play', p.category === 'web' ? 'modal.site' : 'modal.demo', next()));
+        if (l.github) out.push(btn(l.github, 'fab fa-github', 'modal.source', next()));
+        if (l.video)  out.push(btn(l.video, 'fa-solid fa-video', 'modal.videoLink', next()));
+        if (l.doc)    out.push(btn(l.doc, 'fa-solid fa-file-lines', 'modal.doc', next()));
         return out;
     }
 
@@ -316,22 +366,20 @@
         const videos = [...new Set([...(p.videos || []), p.links?.video].filter(Boolean))]
             .filter((v) => toEmbedUrl(v) || /\.(mp4|webm|ogg)(\?|$)/i.test(v));
 
-        let detailsBody = '';
-        if (p.detailsHtml) {
-            detailsBody = p.detailsHtml;
-        } else {
-            const text = p.details || p.description || p.summary || '';
-            detailsBody = text.split(/\n{2,}/).map((para) => `<p>${escapeHtml(para).replace(/\n/g, '<br/>')}</p>`).join('');
-        }
+        const text = pick(p, 'details') || pick(p, 'description') || pick(p, 'summary') || '';
+        const detailsBody = text.split(/\n{2,}/).map((para) => `<p>${escapeHtml(para).replace(/\n/g, '<br/>')}</p>`).join('');
+        const highlights = pick(p, 'highlights') || [];
+        const status = pick(p, 'status');
 
         const info = [
-            ['fa-user-gear', 'Role', p.role],
-            ['fa-people-group', 'Team', p.team],
-            ['fa-regular fa-calendar', 'Timeline', p.date],
-            [cat ? cat.icon : 'fa-folder', 'Category', cat && cat.label],
-        ].filter(([, , v]) => v).map(([icon, label, v]) => `
+            ['fa-solid fa-user-gear', 'modal.role', pick(p, 'role')],
+            ['fa-solid fa-people-group', 'modal.team', pick(p, 'team')],
+            ['fa-regular fa-calendar', 'modal.timeline', pick(p, 'date')],
+            ['fa-solid fa-signal', 'modal.status', status],
+            [`fa-solid ${cat ? cat.icon : 'fa-folder'}`, 'modal.category', catLabel(cat)],
+        ].filter(([, , v]) => v).map(([icon, key, v]) => `
             <div class="info-row">
-                <dt><i class="${icon.startsWith('fa-regular') ? icon : 'fa-solid ' + icon}"></i> ${label}</dt>
+                <dt><i class="${icon}"></i> ${escapeHtml(t(key))}</dt>
                 <dd>${escapeHtml(v)}</dd>
             </div>`).join('');
 
@@ -340,17 +388,19 @@
         const next = nav.next ? byId.get(nav.next) : null;
 
         return `
-            <button class="modal-close" type="button" aria-label="Close project details">
+            <button class="modal-close" type="button" aria-label="${escapeHtml(t('modal.close'))}">
                 <i class="fa-solid fa-xmark"></i>
             </button>
 
             <header class="modal-header" style="--h:${categoryHue(p)}">
                 <div class="modal-kicker">
-                    ${cat ? `<span class="modal-cat"><i class="fa-solid ${escapeHtml(cat.icon)}"></i> ${escapeHtml(cat.label)}</span>` : ''}
+                    ${cat ? `<span class="modal-cat"><i class="fa-solid ${escapeHtml(cat.icon)}"></i> ${escapeHtml(catLabel(cat))}</span>` : ''}
+                    ${p.studio ? `<span class="card-studio"><i class="fa-solid fa-circle-half-stroke"></i> ${escapeHtml(p.studio)}</span>` : ''}
                     ${p.program ? `<span class="card-program"><i class="fa-solid fa-award"></i> ${escapeHtml(p.program)}</span>` : ''}
+                    ${status ? `<span class="status-tag status-tag--inline"><span class="status-dot"></span>${escapeHtml(status)}</span>` : ''}
                 </div>
-                <h2 id="project-modal-title">${escapeHtml(p.title)}</h2>
-                <p class="modal-summary">${escapeHtml(p.summary || '')}</p>
+                <h2 id="project-modal-title">${escapeHtml(pick(p, 'title'))}</h2>
+                <p class="modal-summary">${escapeHtml(pick(p, 'summary') || '')}</p>
             </header>
 
             <div class="modal-body">
@@ -358,21 +408,21 @@
                     ${renderViewer(p, images)}
 
                     <section class="modal-section">
-                        <h4>Overview</h4>
+                        <h4>${t('modal.overview')}</h4>
                         <div class="modal-prose">${detailsBody}</div>
                     </section>
 
-                    ${(p.highlights && p.highlights.length) ? `
+                    ${highlights.length ? `
                         <section class="modal-section">
-                            <h4>Key highlights</h4>
+                            <h4>${t('modal.highlights')}</h4>
                             <ul class="highlights">
-                                ${p.highlights.map((h) => `<li><i class="fa-solid fa-check"></i><span>${escapeHtml(h)}</span></li>`).join('')}
+                                ${highlights.map((h) => `<li><i class="fa-solid fa-check"></i><span>${escapeHtml(h)}</span></li>`).join('')}
                             </ul>
                         </section>` : ''}
 
                     ${videos.length ? `
                         <section class="modal-section">
-                            <h4>Video</h4>
+                            <h4>${t('modal.video')}</h4>
                             <div class="modal-videos">${videos.map(renderVideo).join('')}</div>
                         </section>` : ''}
                 </div>
@@ -380,16 +430,16 @@
                 <aside class="modal-aside">
                     ${info ? `
                         <section class="aside-card">
-                            <h4>Project info</h4>
+                            <h4>${t('modal.info')}</h4>
                             <dl class="info-list">${info}</dl>
                         </section>` : ''}
                     ${(p.stack && p.stack.length) ? `
                         <section class="aside-card">
-                            <h4>Tech &amp; tools</h4>
+                            <h4>${t('modal.tech')}</h4>
                             <div class="badge-row">${renderBadges(p.stack)}</div>
                         </section>` : ''}
                     ${links.length ? `<section class="aside-links">${links.join('')}</section>`
-                        : `<p class="aside-note"><i class="fa-solid fa-lock"></i> Source is private or not published.</p>`}
+                        : `<p class="aside-note"><i class="fa-solid fa-lock"></i> ${escapeHtml(t('modal.private'))}</p>`}
                 </aside>
             </div>
 
@@ -397,10 +447,10 @@
                 <footer class="modal-nav">
                     ${prev ? `<button type="button" class="modal-nav__btn" data-nav="${escapeHtml(prev.id)}">
                         <i class="fa-solid fa-arrow-left"></i>
-                        <span><small>Previous</small>${escapeHtml(prev.title)}</span>
+                        <span><small>${escapeHtml(t('modal.prev'))}</small>${escapeHtml(pick(prev, 'title'))}</span>
                     </button>` : '<span></span>'}
                     ${next ? `<button type="button" class="modal-nav__btn modal-nav__btn--next" data-nav="${escapeHtml(next.id)}">
-                        <span><small>Next</small>${escapeHtml(next.title)}</span>
+                        <span><small>${escapeHtml(t('modal.next'))}</small>${escapeHtml(pick(next, 'title'))}</span>
                         <i class="fa-solid fa-arrow-right"></i>
                     </button>` : ''}
                 </footer>` : ''}
@@ -466,21 +516,27 @@
 
     function showViewerImage(index) {
         const viewer = modalCardEl.querySelector('.viewer');
-        if (!viewer) return;
+        if (!viewer || !viewer.dataset.images) return;
         const images = JSON.parse(viewer.dataset.images);
         const i = (index + images.length) % images.length;
         viewer.dataset.current = String(i);
-        viewer.querySelector('.viewer-stage__img').src = images[i];
-        viewer.querySelector('.viewer-stage__img').alt = `Screenshot ${i + 1}`;
+        const stageImg = viewer.querySelector('.viewer-stage__img');
+        stageImg.src = images[i];
+        stageImg.alt = t('modal.screenshot', { n: i + 1 });
         viewer.querySelector('.viewer-stage__backdrop').src = images[i];
         const counter = viewer.querySelector('[data-viewer-current]');
         if (counter) counter.textContent = String(i + 1);
-        viewer.querySelectorAll('.viewer-thumb').forEach((t) => {
-            const on = Number(t.dataset.viewerIndex) === i;
-            t.classList.toggle('is-active', on);
-            t.setAttribute('aria-selected', String(on));
-            if (on) t.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        viewer.querySelectorAll('.viewer-thumb').forEach((thumb) => {
+            const on = Number(thumb.dataset.viewerIndex) === i;
+            thumb.classList.toggle('is-active', on);
+            thumb.setAttribute('aria-selected', String(on));
+            if (on) thumb.scrollIntoView({ block: 'nearest', inline: 'nearest' });
         });
+    }
+
+    function pageTitle() {
+        const page = document.body.dataset.page;
+        return page ? t(`meta.${page}.title`) : document.title;
     }
 
     function openModal(projectId, opts = {}) {
@@ -499,32 +555,31 @@
         const wasOpen = !modalEl.hidden;
         if (!wasOpen) lastFocused = document.activeElement;
         currentId = projectId;
+        const keepScroll = opts.keepScroll ? modalCardEl.scrollTop : 0;
         modalCardEl.innerHTML = renderModalContent(project, nav);
         modalEl.hidden = false;
-        modalCardEl.scrollTop = 0; // new project starts at the top, not where the previous one was scrolled
-        // Force reflow so the opening transition runs
-        void modalEl.offsetWidth;
+        modalCardEl.scrollTop = keepScroll; // a new project starts at the top
+        void modalEl.offsetWidth; // reflow so the opening transition runs
         modalEl.classList.add('is-open');
         document.body.classList.add('modal-open');
 
         if (document.getElementById('projects-gallery')) {
-            history.replaceState(null, '', `#${projectId}`);
+            history.replaceState(null, '', `${location.pathname}${location.search}#${projectId}`);
         }
-        document.title = `${project.title} — Eren Atasun`;
+        document.title = `${pick(project, 'title')} — Eren Atasun`;
 
+        if (opts.focus === false) return;
         const target = opts.focus === 'nav'
-            ? (modalCardEl.querySelector(`[data-nav]`) || modalCardEl.querySelector('.modal-close'))
+            ? (modalCardEl.querySelector('[data-nav]') || modalCardEl.querySelector('.modal-close'))
             : modalCardEl.querySelector('.modal-close');
         if (target) target.focus({ preventScroll: true });
     }
-
-    const baseTitle = document.title;
 
     function closeModal() {
         if (!modalEl || modalEl.hidden) return;
         modalEl.classList.remove('is-open');
         document.body.classList.remove('modal-open');
-        document.title = baseTitle;
+        document.title = pageTitle();
         if (location.hash && byId.has(location.hash.slice(1))) {
             history.replaceState(null, '', location.pathname + location.search);
         }
@@ -544,23 +599,25 @@
     let lbIndex = 0;
     let lbReturnFocus = null;
 
+    function lightboxMarkup() {
+        return `
+            <button type="button" class="lightbox__close" data-lb="close" aria-label="${escapeHtml(t('lb.close'))}"><i class="fa-solid fa-xmark"></i></button>
+            <button type="button" class="lightbox__arrow lightbox__arrow--prev" data-lb="prev" aria-label="${escapeHtml(t('lb.prev'))}"><i class="fa-solid fa-chevron-left"></i></button>
+            <figure class="lightbox__figure" data-lb="close">
+                <img class="lightbox__img" alt="" />
+                <figcaption class="lightbox__counter"></figcaption>
+            </figure>
+            <button type="button" class="lightbox__arrow lightbox__arrow--next" data-lb="next" aria-label="${escapeHtml(t('lb.next'))}"><i class="fa-solid fa-chevron-right"></i></button>
+        `;
+    }
+
     function ensureLightbox() {
         if (lbEl) return;
         lbEl = document.createElement('div');
         lbEl.className = 'lightbox';
         lbEl.setAttribute('role', 'dialog');
         lbEl.setAttribute('aria-modal', 'true');
-        lbEl.setAttribute('aria-label', 'Screenshot viewer');
         lbEl.hidden = true;
-        lbEl.innerHTML = `
-            <button type="button" class="lightbox__close" data-lb="close" aria-label="Close viewer"><i class="fa-solid fa-xmark"></i></button>
-            <button type="button" class="lightbox__arrow lightbox__arrow--prev" data-lb="prev" aria-label="Previous screenshot"><i class="fa-solid fa-chevron-left"></i></button>
-            <figure class="lightbox__figure" data-lb="close">
-                <img class="lightbox__img" alt="" />
-                <figcaption class="lightbox__counter"></figcaption>
-            </figure>
-            <button type="button" class="lightbox__arrow lightbox__arrow--next" data-lb="next" aria-label="Next screenshot"><i class="fa-solid fa-chevron-right"></i></button>
-        `;
         document.body.appendChild(lbEl);
         lbEl.addEventListener('click', (e) => {
             if (e.target.classList.contains('lightbox__img')) return;
@@ -575,8 +632,9 @@
 
     function lbShow(i) {
         lbIndex = (i + lbImages.length) % lbImages.length;
-        lbEl.querySelector('.lightbox__img').src = lbImages[lbIndex];
-        lbEl.querySelector('.lightbox__img').alt = `Screenshot ${lbIndex + 1} of ${lbImages.length}`;
+        const img = lbEl.querySelector('.lightbox__img');
+        img.src = lbImages[lbIndex];
+        img.alt = t('lb.alt', { n: lbIndex + 1, total: lbImages.length });
         lbEl.querySelector('.lightbox__counter').textContent = `${lbIndex + 1} / ${lbImages.length}`;
         lbEl.classList.toggle('is-single', lbImages.length < 2);
         if (modalCardEl && modalCardEl.querySelector('.viewer')) showViewerImage(lbIndex);
@@ -585,6 +643,8 @@
     function openLightbox(images, index) {
         if (!images || !images.length) return;
         ensureLightbox();
+        lbEl.innerHTML = lightboxMarkup(); // rebuilt each time so labels follow the language
+        lbEl.setAttribute('aria-label', t('lb.label'));
         lbImages = images;
         lbReturnFocus = document.activeElement;
         lbEl.hidden = false;
@@ -639,13 +699,34 @@
     const featuredEl = document.getElementById('featured-projects');
     const statsEl = document.getElementById('projects-stats');
 
-    if (statsEl) renderStats(statsEl);
-    if (galleryEl) initGallery(galleryEl);
-    if (featuredEl) renderFeatured(featuredEl);
-    document.querySelectorAll('[data-project-count]').forEach((el) => { el.textContent = PROJECTS.length; });
+    function renderCounts() {
+        document.querySelectorAll('[data-project-count]').forEach((el) => { el.textContent = PROJECTS.length; });
+        document.querySelectorAll('[data-i18n-count]').forEach((el) => {
+            el.textContent = t(el.dataset.i18nCount, { n: PROJECTS.length });
+        });
+    }
 
+    function renderAll() {
+        if (statsEl) renderStats(statsEl);
+        if (featuredEl) renderFeatured(featuredEl);
+        renderCounts();
+    }
+
+    renderAll();
+    if (galleryEl) initGallery(galleryEl);
     wireCardOpens(galleryEl);
     wireCardOpens(featuredEl);
+
+    // Language switch: re-render everything in place, keep filters and the open project
+    I18N.onChange(() => {
+        renderAll();
+        if (galleryApply) galleryApply();
+        if (currentId && modalEl && !modalEl.hidden) {
+            openModal(currentId, { keepNav: true, keepScroll: true, focus: false });
+        } else {
+            document.title = pageTitle();
+        }
+    });
 
     // Deep link: projects.html#<project-id> opens that project
     function openFromHash() {
